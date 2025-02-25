@@ -103,7 +103,13 @@ ingress:
     - /jobs
 
 # -- Pod affinity
-affinity: {}
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/access_csc
+         operator: Exists
 
 # -- Pod toleration
 tolerations:

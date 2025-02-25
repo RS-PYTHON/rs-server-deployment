@@ -109,7 +109,7 @@ affinity:
    requiredDuringSchedulingIgnoredDuringExecution:
      nodeSelectorTerms:
      - matchExpressions:
-       - key: node-role.kubernetes.io/staging
+       - key: node-role.kubernetes.io/access_csc
          operator: Exists
 
 # -- Pod toleration

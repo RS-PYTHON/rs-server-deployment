@@ -52,3 +52,12 @@ postgres:
   secret:
     user: {{ rs_server_catalog.database.username }}
     pass: {{ rs_server_catalog.database.password }}
+
+# -- Pod affinity
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/processing
+         operator: Exists

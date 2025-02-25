@@ -38,5 +38,14 @@ ingress:
   # -- Ingress path for the application. Must be the same value as app.docsUrl.
   path: /docs
 
+# -- Pod affinity
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/processing
+         operator: Exists
+
 stac_browser:
   urls: "https://stac-browser-auxip.{{ platform_domain_name }};https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"

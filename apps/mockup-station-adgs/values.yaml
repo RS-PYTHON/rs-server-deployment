@@ -14,3 +14,12 @@
 
 # -- Namespace for the deployment
 namespace: processing
+
+# -- Pod affinity
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/processing
+         operator: Exists

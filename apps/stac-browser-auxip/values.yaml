@@ -39,7 +39,14 @@ app:
   # -- URL of the STAC catalog
   SB_catalogUrl: https://{{ platform_domain_name }}/auxip/
 
-
+# -- Pod affinity
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/processing
+         operator: Exists
 
 ingress:
   # -- Enabled/Disable ingress

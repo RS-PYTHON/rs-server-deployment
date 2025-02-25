@@ -25,3 +25,12 @@ obs:
     ak: {{ s3.access_key }}
     # -- Secret Key to authenticate with the object storage service
     sk: {{ s3.secret_key }}
+
+# -- Pod affinity
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/processing
+         operator: Exists
