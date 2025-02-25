@@ -23,3 +23,10 @@ affinity:
      - matchExpressions:
        - key: node-role.kubernetes.io/processing
          operator: Exists
+
+# -- Pod toleration
+tolerations:
+- key: role
+  operator: Equal
+  value: processing
+  effect: NoSchedule
