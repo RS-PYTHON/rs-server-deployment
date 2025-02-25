@@ -68,3 +68,6 @@ tolerations:
   operator: Equal
   value: processing
   effect: NoSchedule
+
+volume:
+  storageClassName: csi-cinder-high-speed-retain
