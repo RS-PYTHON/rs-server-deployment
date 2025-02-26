@@ -20,5 +20,5 @@ helmCharts:
 - name: stac-browser
   repo: https://rs-python.github.io/rs-helm
   releaseName: "{{ app_name }}"
-  version: 0.2.0-a10-67160ff
+  version: 0.2.0-a10-94e9fa8
   valuesFile: values.yaml
