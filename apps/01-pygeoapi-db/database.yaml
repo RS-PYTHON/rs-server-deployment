@@ -15,13 +15,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: create-status-db
+  name: create-pygeoapi-db
 spec:
   ttlSecondsAfterFinished: 360
   template:
     spec:
       containers:
-      - name: create-status-db
+      - name: create-pygeoapi-db
         image: ghcr.io/cloudnative-pg/postgresql:16.1
         command: ["/scripts/create-database.sh"]
         volumeMounts:
@@ -72,7 +72,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ rs_server.database.secret }}
-  labels: 
+  labels:
     app: keycloak
 type: Opaque
 stringData:
