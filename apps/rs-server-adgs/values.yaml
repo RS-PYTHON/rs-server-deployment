@@ -119,8 +119,8 @@ tolerations:
   value: access_csc
   effect: NoSchedule
 
-# -- Pod initContainer
-initContainer:
+# -- Pod initContainers
+initContainers:
 - name: init-check
   image: alpine/curl:latest
   command:
