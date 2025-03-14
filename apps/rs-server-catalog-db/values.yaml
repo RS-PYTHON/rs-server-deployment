@@ -69,5 +69,16 @@ tolerations:
   value: processing
   effect: NoSchedule
 
+# -- Pod initContainers
+initContainers:
+- name: init-{{ .Release.Name }}
+  image: alpine/curl
+  command: [ "/scripts/init/{{ .Values.app.pgstac_init_download_schema_script }}" ]
+  volumeMounts:
+    - name: download-json-schema
+      mountPath: /scripts/init/
+    - name: pgstack-json-schema
+      mountPath: /opt/pgstack_json_schema/
+
 volume:
   storageClassName: csi-cinder-high-speed-retain
