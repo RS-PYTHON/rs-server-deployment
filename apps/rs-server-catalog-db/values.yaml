@@ -71,9 +71,9 @@ tolerations:
 
 # -- Pod initContainers
 initContainers:
-- name: init-{{ .Release.Name }}
+- name: init-pgstac
   image: alpine/curl
-  command: [ "/scripts/init/{{ .Values.app.pgstac_init_download_schema_script }}" ]
+  command: [ "/scripts/init/download.sh" ]
   volumeMounts:
     - name: download-json-schema
       mountPath: /scripts/init/
