@@ -13,6 +13,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a12] - 2025-04-14
+
+### Added
+
+- `obs` properties to the mockup-station-cadip/adgs
+- RSPY-561 : Smarter handling of Staging OAuth2 tokens
+
+### Changed
+
+- Bump rs-server helm charts to `0.2a12`
+
+### Fixed
+
+- RSPY-551 : No opentelemetry data for rs-server-adgs, rs-server-cadip, rs-server-staging after start/stop platform
+
 ## [0.2a11] - 2025-03-12
 
 :rotating_light: **Breaking changes**

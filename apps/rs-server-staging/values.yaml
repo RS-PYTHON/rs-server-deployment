@@ -28,6 +28,10 @@ app:
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
   # -- Catalog pod address
   endpointCatalog: http://rs-server-catalog.processing.svc.cluster.local:8080
+   # -- Cadip server pod address
+  endpointCadip: https://{{ platform_domain_name }}/cadip 
+   # -- Adgs server pod address
+  endpointAdgs: https://{{ platform_domain_name }}/auxip 
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
   station:
