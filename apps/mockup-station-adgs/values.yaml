@@ -15,6 +15,12 @@
 # -- Namespace for the deployment
 namespace: processing
 
+app:
+  # -- Bucket name to stage data from
+  bucketName:
+  # -- Path inside the bucket to the data
+  bucketPath:
+
 # -- Pod affinity
 affinity:
   nodeAffinity:
