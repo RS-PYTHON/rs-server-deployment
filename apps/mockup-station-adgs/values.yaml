@@ -17,9 +17,9 @@ namespace: processing
 
 app:
   # -- Bucket name to stage data from
-  bucketName:
+  bucketName: {{ rs_station_mockup.adgs.adgs.bucketName}}
   # -- Path inside the bucket to the data
-  bucketPath:
+  bucketPath: {{ rs_station_mockup.adgs.adgs.bucketPath}}
 
 # -- Pod affinity
 affinity:

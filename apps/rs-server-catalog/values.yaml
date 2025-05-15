@@ -23,6 +23,25 @@ app:
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
   uacHomeUrl : https://apikeymanager.{{ platform_domain_name }}/docs
+  # -- Config directory for the application
+  confDir: /app/conf
+
+  # -- Bucket configuration to use to monitor the lifespan and name of data buckets
+  # Use an external configuration through an external configmap with the value "externalCatalogBucketConfigMapName"
+  # OR
+  # Set your own configuration in the value expirationBucketCsv
+  bucketConfig:
+    # -- Set to true to use an external configmap for the configuration instead of the one set in expirationBucketCsv
+    useExternalCatalogBucketConfigMap: true
+    # -- Name of the external configmap to use. Used only if useExternalCatalogBucketConfigMap is true
+    externalCatalogBucketConfigMapName: "rs-catalog-staging-configmap"
+    # -- Bucket configuration. Used only if useExternalCatalogBucketConfigMap is false. 
+    # Default config puts all data in a bucket called rspython-ops-catalog-all-production with a lifespan of 30 days.
+    expirationBucketCsv: |
+      *, *, *, 30, rspython-ops-catalog-all-production
+    # -- File name for the configuration.
+    # If you use an external configmap, put the name of the file of your configmap, so the environment variables are set properly
+    bucketConfigFileName: expiration_bucket.csv
 
 auth:
   secret:
