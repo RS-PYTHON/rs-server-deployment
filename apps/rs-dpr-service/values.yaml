@@ -32,7 +32,7 @@ app:
   # -- URL of the API Key Manager service (internal)
   uacUrl: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
   # -- URL of the API Key Manager home page (public)
-  uacHomeUrl: https://apikeymanager.subdomain.example.com/docs
+  uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
   
 dask:
   # -- Dask gateway address
@@ -40,7 +40,7 @@ dask:
   # -- Dask gateway auth type
   gateway_auth_type: jupyterhub
   # -- Jupyter API Token when dask.jupyterhub=jupyterhub
-  jupyterhub_api_token: JUPYTER_API_TOKEN_HERE
+  jupyterhub_api_token: {{ rs_server_staging.jupyterhub_token }}
   # -- Dask cluster name for real eopf processor
   clusterName: dask-eopf
   # -- Dask cluster name for mockup eopf processor
@@ -82,50 +82,67 @@ probe:
     timeoutSeconds: 5
 
 # -- Pod affinity
-affinity: {}
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/processing
+         operator: Exists
 
 # -- Pod toleration
-tolerations: []
+tolerations:
+- key: role
+  operator: Equal
+  value: processing
+  effect: NoSchedule
 
 # -- Pod initContainers
-initContainers: []
+initContainers:
+- name: init-check
+  image: alpine/curl:latest
+  command:
+    - /bin/sh
+    - -c
+    - |
+      until test "$(curl -XGET --silent grafana-tempo-distributor.logging.svc.cluster.local:3100/ready)" = "ready"; do echo grafana-tempo-distributor is not ready; sleep 2; done; echo grafana-tempo-distributor reached
 
 postgres:
   # -- PostgreSQL port
   port: "5432"
   # -- PostgreSQL database name
-  db: rspydemo
+  db: {{ rs_server.database.name }}
   # -- PostgreSQL service URL
-  host: postgresql-cluster-rw.database.svc.cluster.local
+  host: {{ rs_server.database.host }}
   secret:
     # -- Username to authenticate with the PostgreSQL service
-    user: test
+    user: {{ rs_server.database.username }}
     # -- Password to authenticate with the PostgreSQL service
-    pass: test
+    pass: {{ rs_server.database.password }}
 
 obs:
   # -- URL of the object storage service endpoint
-  endpoint: http://minio.minio.svc.cluster.local:9000
+  endpoint: {{ s3.endpoint }}
   # -- Region of the object storage service
-  region: sbg
+  region: {{ s3.region }}
   secret:
     # -- Access Key to authenticate with the object storage service
-    ak: TDr8foJqSygBQ9YFmWDy
+    ak: {{ s3.access_key }}
     # -- Secret Key to authenticate with the object storage service
-    sk: z2RaqjFttnVZRTsLLqmy4PE6PzJOKzPsE47alDBs
+    sk: {{ s3.secret_key }}
 
 auth:
   secret:
     # -- OIDC End Point
-    oidc_endpoint: ""
+    oidc_endpoint: "https://iam.{{ platform_domain_name }}"
     # -- OIDC Realm
-    oidc_realm: ""
+    oidc_realm: "rspy"
     # -- OIDC CLient ID
-    oidc_client_id: ""
+    oidc_client_id: "apikeymanager"
     # -- OIDC Secret used to sync user info from Keycloak
-    oidc_client_secret: ""
+    oidc_client_secret: "{{ apikeymanager_oidc_client_secret }}"
     # -- Random string used to encode cookie-based HTTP sessions in SessionMiddleware
-    cookie_secret: ""
+    cookie_secret: "{{ rsserver_cookieSecret }}"
     
 image:
   # -- Image registry
@@ -149,7 +166,7 @@ ingress:
     # -- Ingress Issuer name
     name: letsencrypt-prod
   # -- Ingress host name
-  host: subdomain.example.com
+  host: {{ platform_domain_name }}
   # -- Ingress path for the application
   path:
     - /dpr/processes
