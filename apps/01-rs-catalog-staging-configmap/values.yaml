@@ -22,4 +22,4 @@ bucketConfigFileName: expiration_bucket.csv
 # Format :
 # <owner>,<collection>,<eopf:type>,<expiration delay>,<bucket name>
 expiration_bucket_csv: |
-{{ rs_server_catalog_staging_configmap | indent( width=2, first=True) }}
+  {{ rs_server_catalog_staging_configmap | indent( width=2, first=False) }}
