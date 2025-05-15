@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a13] - 2025-05-15
+
+### Added
+
+- add `rs-catalog-staging-configmap` and `rs-dpr-service`
+
+### Changed
+
+- Bump rs-server helm charts
+- Update changelog
+
 ## [0.2a12] - 2025-04-14
 
 ### Added

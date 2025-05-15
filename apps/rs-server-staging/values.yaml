@@ -44,6 +44,16 @@ app:
     mti:
       type: cadip
 
+  # -- Bucket configuration to use to monitor the lifespan and name of data buckets
+  # Use an external configuration through an external configmap with the value "externalCatalogBucketConfigMapName"
+  # OR
+  # Set your own configuration in the value expirationBucketCsv
+  bucketConfig:
+    # -- Set to true to use an external configmap for the configuration instead of the one set in expirationBucketCsv
+    useExternalStagingBucketConfigMap: true
+    # -- Name of the external configmap to use. Used only if useExternalCatalogBucketConfigMap is true
+    externalStagingBucketConfigMapName: "rs-catalog-staging-configmap"
+
 dask:
   # -- Dask gateway address
   gateway_address: http://traefik-dask-gateway.dask-gateway.svc.cluster.local

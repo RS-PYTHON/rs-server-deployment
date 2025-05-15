@@ -1,4 +1,4 @@
-# Copyright 2024 CS Group
+# Copyright 2025 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  app.kubernetes.io/instance: "{{ app_name }}"
+# -- Namespace where to deploy the ConfigMap
 namespace: processing
 
-helmCharts:
-- name: rs-server-staging
-  repo: https://rs-python.github.io/rs-helm
-  releaseName: "{{ app_name }}"
-  version: 0.2.0-a13
-  valuesFile: values.yaml
+# -- Name to give to the configuration file
+bucketConfigFileName: expiration_bucket.csv
+
+# -- Bucket configuration
+# Format :
+# <owner>,<collection>,<eopf:type>,<expiration delay>,<bucket name>
+expiration_bucket_csv: |
+  {{ rs_server_catalog_staging_configmap | indent( width=2, first=False) }}

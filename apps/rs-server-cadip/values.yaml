@@ -35,25 +35,8 @@ app:
   # -- allow EODAG to handle it (set it to false for EODAG).
   useTokenModule: false
   station:
-    # -- CADIP station name
-    cadip:
-      endpoint:
-        # -- CADIP station URL
-        url:
-          token: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080/oauth2/token
-          odata: http://mockup-station-cadip-cadip.processing.svc.cluster.local:8080
-    # @ignored
-    sgs:
-      endpoint:
-        url: 
-          token: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080/oauth2/token
-          odata: http://mockup-station-cadip-sgs.processing.svc.cluster.local:8080
-    # @ignored
-    mti:
-      endpoint:
-        url: 
-          token: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080/oauth2/token
-          odata: http://mockup-station-cadip-mti.processing.svc.cluster.local:8080
+    {{ rs_server_cadip_station | indent( width=4, first=False) }}
+
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 
@@ -69,19 +52,6 @@ auth:
     oidc_client_secret: "{{ apikeymanager_oidc_client_secret }}"
     # -- Random string used to encode cookie-based HTTP sessions in SessionMiddleware
     cookie_secret: "{{ rsserver_cookieSecret }}"
-
-postgres:
-  # -- PostgreSQL port
-  port: "5432"
-  # -- PostgreSQL database name
-  db: {{ rs_server.database.name }}
-  # -- PostgreSQL service URL
-  host: {{ rs_server.database.host }}
-  secret:
-    # -- Username to authenticate with the PostgreSQL service
-    user: {{ rs_server.database.username }}
-    # -- Password to authenticate with the PostgreSQL service
-    pass: {{ rs_server.database.password }}
 
 obs:
   # -- URL of the object storage service endpoint
