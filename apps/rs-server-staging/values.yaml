@@ -53,13 +53,6 @@ app:
     useExternalStagingBucketConfigMap: true
     # -- Name of the external configmap to use. Used only if useExternalCatalogBucketConfigMap is true
     externalStagingBucketConfigMapName: "rs-catalog-staging-configmap"
-    # -- Bucket configuration. Used only if useExternalCatalogBucketConfigMap is false. 
-    # Default config puts all data in a bucket called rspython-ops-staging-all-production with a lifespan of 30 days.
-    expirationBucketCsv: |
-      *, *, *, 30, rspython-ops-staging-all-production
-    # -- File name for the configuration.
-    # If you use an external configmap, put the name of the file of your configmap, so the environment variables are set properly
-    bucketConfigFileName: expiration_bucket.csv
 
 dask:
   # -- Dask gateway address

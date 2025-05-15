@@ -22,19 +22,4 @@ bucketConfigFileName: expiration_bucket.csv
 # Format :
 # <owner>,<collection>,<eopf:type>,<expiration delay>,<bucket name>
 expiration_bucket_csv: |
-  *,*,*,30,rspython-ops-catalog-playground
-  copernicus,*,*,7300,rspython-ops-catalog-copernicus-default
-  copernicus,*,*ADF*,7300,rspython-ops-catalog-copernicus-aux
-  copernicus,s1-l0,*,30,rspython-ops-catalog-copernicus-s1-l0
-  copernicus,s1-l1,*,30,rspython-ops-catalog-copernicus-s1-l1
-  copernicus,s1-l2,*,30,rspython-ops-catalog-copernicus-s1-l2
-  copernicus,s2-l0,*,30,rspython-ops-catalog-copernicus-s2-l0
-  copernicus,s2-l1,*,30,rspython-ops-catalog-copernicus-s2-l1
-  copernicus,s2-l2,*,30,rspython-ops-catalog-copernicus-s2-l2
-  copernicus,s3-l0,*,30,rspython-ops-catalog-copernicus-s3-l0
-  copernicus,s3-l1-nrt,*,30,rspython-ops-catalog-copernicus-s3-l1-nrt
-  copernicus,s3-l2-nrt,*,30,rspython-ops-catalog-copernicus-s3-l2-nrt
-  copernicus,s3-l1-ntc, *,30,rspython-ops-catalog-copernicus-s3-l1-ntc 
-  copernicus,s3-l2-ntc,*,30,rspython-ops-catalog-copernicus-s3-l2-ntc 
-  copernicus,s3-l1-stc,*,30,rspython-ops-catalog-copernicus-s3-l1-stc
-  copernicus,s3-l2-stc, *,30,rspython-ops-catalog-copernicus-s3-l2-stc
+{{ rs_server_catalog_staging_configmap | indent( width=2, first=True) }}
