@@ -151,8 +151,6 @@ image:
   repository: rs-python
   # -- Image name
   name: rs-dpr-service
-  # -- Image version, can be a tag or a digest
-  version: 0.2a13.post3.dev0
   # -- Image pull policy
   PullPolicy: IfNotPresent
   #imagePullSecrets: regcred
