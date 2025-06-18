@@ -37,26 +37,25 @@ affinity:
    requiredDuringSchedulingIgnoredDuringExecution:
      nodeSelectorTerms:
      - matchExpressions:
-       - key: node-role.kubernetes.io/processing
+       - key: node-role.kubernetes.io/rs_server
          operator: Exists
 
 # -- Pod toleration
 tolerations:
-- key: role
-  operator: Equal
-  value: processing
-  effect: NoSchedule
+  - key: role
+    value: rs_server
+    effect: NoSchedule
 
 # -- Pod initContainers
 initContainers:
-- name: init-pgstac
-  image: alpine/curl
-  command: [ "/scripts/init/download.sh" ]
-  volumeMounts:
-    - name: download-json-schema
-      mountPath: /scripts/init/
-    - name: pgstack-json-schema
-      mountPath: /opt/pgstack_json_schema/
+  - name: init-pgstac
+    image: alpine/curl
+    command: [ "/scripts/init/download.sh" ]
+    volumeMounts:
+      - name: download-json-schema
+        mountPath: /scripts/init/
+      - name: pgstack-json-schema
+        mountPath: /opt/pgstack_json_schema/
 
 volume:
   storageClassName: csi-cinder-high-speed-retain
