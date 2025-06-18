@@ -60,6 +60,17 @@ spec:
             secretKeyRef:
               name: postgresql-cluster-superuser
               key: port
+      affinity:  
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: "node-role.kubernetes.io/rs_server"
+                    operator: Exists
+      tolerations:
+        - key: role
+          value: rs_server
+          effect: NoSchedule
       volumes:
       - name: create-database
         configMap:
