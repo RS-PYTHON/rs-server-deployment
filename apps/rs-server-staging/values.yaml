@@ -127,17 +127,16 @@ affinity:
 
 # -- Pod toleration
 tolerations:
-- key: role
-  operator: Equal
-  value: access_csc
-  effect: NoSchedule
+  - key: role
+    value: access_csc
+    effect: NoSchedule
 
 # -- Pod initContainers
 initContainers:
-- name: init-check
-  image: alpine/curl:latest
-  command:
-    - /bin/sh
-    - -c
-    - |
-      until test "$(curl -XGET --silent grafana-tempo-distributor.logging.svc.cluster.local:3100/ready)" = "ready"; do echo grafana-tempo-distributor is not ready; sleep 2; done; echo grafana-tempo-distributor reached
+  - name: init-check
+    image: alpine/curl:latest
+    command:
+      - /bin/sh
+      - -c
+      - |
+        until test "$(curl -XGET --silent grafana-tempo-distributor.logging.svc.cluster.local:3100/ready)" = "ready"; do echo grafana-tempo-distributor is not ready; sleep 2; done; echo grafana-tempo-distributor reached

@@ -27,7 +27,7 @@ affinity:
    requiredDuringSchedulingIgnoredDuringExecution:
      nodeSelectorTerms:
      - matchExpressions:
-       - key: node-role.kubernetes.io/processing
+       - key: node-role.kubernetes.io/rs_server
          operator: Exists
 
 obs:
@@ -43,10 +43,9 @@ obs:
 
 # -- Pod toleration
 tolerations:
-- key: role
-  operator: Equal
-  value: processing
-  effect: NoSchedule
+  - key: role
+    value: rs_server
+    effect: NoSchedule
 
 volume:
   storageClassName: csi-cinder-high-speed-retain
