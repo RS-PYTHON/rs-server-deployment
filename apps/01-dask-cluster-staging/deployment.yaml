@@ -1,0 +1,46 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dask-cluster-launcher
+  namespace: dask-gateway
+spec:
+  selector:
+    matchLabels:
+      app: dask-cluster-launcher
+  template:
+    metadata:
+      labels:
+        app: dask-cluster-launcher
+    spec:
+      containers:
+      - args:
+        - pip install dask==2024.5.2 dask-gateway==2024.1.0 && python /scripts/script.py
+        command:
+        - /bin/sh
+        - -c
+        env:
+        - name: JUPYTERHUB_API_TOKEN
+          value: {{ rs_server_staging.jupyterhub_token }}
+        image: python:3.11-slim
+        name: dask-launcher
+        volumeMounts:
+        - mountPath: /scripts
+          name: script-volume
+      volumes:
+      - configMap:
+          name: dask-cluster-script
+        name: script-volume
