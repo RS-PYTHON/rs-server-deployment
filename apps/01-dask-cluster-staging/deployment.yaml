@@ -16,7 +16,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dask-cluster-launcher
-  namespace: dask-gateway
 spec:
   selector:
     matchLabels:
@@ -32,14 +31,14 @@ spec:
         command:
         - /bin/sh
         - -c
-        env:
-        - name: JUPYTERHUB_API_TOKEN
-          value: {{ rs_server_staging.jupyterhub_token }}
         image: python:3.11-slim
         name: dask-launcher
         volumeMounts:
         - mountPath: /scripts
           name: script-volume
+        envFrom:
+        - secretRef:
+            name: dask-cluster-staging
       volumes:
       - configMap:
           name: dask-cluster-script

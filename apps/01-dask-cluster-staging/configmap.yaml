@@ -11,7 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+kind: ConfigMap
+metadata:
+  name: dask-cluster-script
 apiVersion: v1
 data:
   script.py: |
@@ -38,11 +40,11 @@ data:
         image="ghcr.io/rs-python/rs-infra-core-dask-staging:latest",
         cluster_name="dask-staging",
         scheduler_extra_pod_labels={"cluster_name": "dask-staging"},
-        worker_cores=1,
-        worker_memory=2.0,
-        cluster_max_workers=3,
-        cluster_max_cores=3,
-        cluster_max_memory=9663676416,
+        worker_cores={{ rs_server_staging.dask.worker_cores }},
+        worker_memory={{ rs_server_staging.dask.worker_memory }},
+        cluster_max_workers={{ rs_server_staging.dask.cluster_max_workers }},
+        cluster_max_cores={{ rs_server_staging.dask.cluster_max_cores }},
+        cluster_max_memory={{ rs_server_staging.dask.cluster_max_memory }},
         worker_extra_pod_config={
             "affinity": {
                 "nodeAffinity": {
@@ -97,20 +99,16 @@ data:
         }
     )
 
-    cluster.scale(3)
+    cluster.scale({{ rs_server_staging.dask.worker_count }})
     client = cluster.get_client()
 
     tries = 0
     while True:
         scaled = len(client.scheduler_info()["workers"])
-        print(f"Dask workers are up: {scaled}/3")
-        if scaled >= 3:
+        print(f"Dask workers are up: {scaled}/{{ rs_server_staging.dask.worker_count }}")
+        if scaled >= {{ rs_server_staging.dask.worker_count }}:
             break
         tries += 1
         if tries >= 60:
-            raise TimeoutError(f"Timeout waiting for workers: {scaled}/3")
+            raise TimeoutError(f"Timeout waiting for workers: {scaled}/{{ rs_server_staging.dask.worker_count }}")
         time.sleep(5)
-kind: ConfigMap
-metadata:
-  name: dask-cluster-script
-  namespace: dask-gateway

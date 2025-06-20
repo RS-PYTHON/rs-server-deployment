@@ -20,3 +20,4 @@ namespace: dask-gateway
 resources:
   - configmap.yaml
   - deployment.yaml
+  - secret.yaml
