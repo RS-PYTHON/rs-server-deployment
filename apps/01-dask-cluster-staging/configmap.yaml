@@ -1,0 +1,114 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+kind: ConfigMap
+metadata:
+  name: dask-cluster-script
+apiVersion: v1
+data:
+  script.py: |
+    import os
+    import time
+    from dask_gateway import Gateway
+    from dask.distributed import Client as DaskClient
+
+    os.environ["JUPYTERHUB_API_TOKEN"] = os.environ["JUPYTERHUB_API_TOKEN"]
+
+    gateway = Gateway(
+        address="http://traefik-dask-gateway.dask-gateway.svc.cluster.local",
+        auth="jupyterhub"
+    )
+
+    clusters = sorted(
+        gateway.list_clusters(),
+        key=lambda cluster: cluster.start_time,
+        reverse=True,
+    )
+
+    cluster = gateway.new_cluster(
+        namespace="dask-gateway",
+        image="ghcr.io/rs-python/rs-infra-core-dask-staging:latest",
+        cluster_name="dask-staging",
+        scheduler_extra_pod_labels={"cluster_name": "dask-staging"},
+        worker_cores={{ rs_server_staging.dask.worker_cores }},
+        worker_memory={{ rs_server_staging.dask.worker_memory }},
+        cluster_max_workers={{ rs_server_staging.dask.cluster_max_workers }},
+        cluster_max_cores={{ rs_server_staging.dask.cluster_max_cores }},
+        cluster_max_memory={{ rs_server_staging.dask.cluster_max_memory }},
+        worker_extra_pod_config={
+            "affinity": {
+                "nodeAffinity": {
+                    "requiredDuringSchedulingIgnoredDuringExecution": {
+                        "nodeSelectorTerms": [
+                            {
+                                "matchExpressions": [
+                                    {
+                                        "key": "node-role.kubernetes.io/access_csc",
+                                        "operator": "Exists"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "tolerations": [
+                {
+                    "key": "role",
+                    "operator": "Equal",
+                    "value": "access_csc",
+                    "effect": "NoSchedule"
+                }
+            ]
+        },
+        scheduler_extra_pod_config={
+            "affinity": {
+                "nodeAffinity": {
+                    "requiredDuringSchedulingIgnoredDuringExecution": {
+                        "nodeSelectorTerms": [
+                            {
+                                "matchExpressions": [
+                                    {
+                                        "key": "node-role.kubernetes.io/access_csc",
+                                        "operator": "Exists"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "tolerations": [
+                {
+                    "key": "role",
+                    "operator": "Equal",
+                    "value": "access_csc",
+                    "effect": "NoSchedule"
+                }
+            ]
+        }
+    )
+
+    cluster.scale({{ rs_server_staging.dask.worker_count }})
+    client = cluster.get_client()
+
+    tries = 0
+    while True:
+        scaled = len(client.scheduler_info()["workers"])
+        print(f"Dask workers are up: {scaled}/{{ rs_server_staging.dask.worker_count }}")
+        if scaled >= {{ rs_server_staging.dask.worker_count }}:
+            break
+        tries += 1
+        if tries >= 60:
+            raise TimeoutError(f"Timeout waiting for workers: {scaled}/{{ rs_server_staging.dask.worker_count }}")
+        time.sleep(5)
