@@ -43,6 +43,8 @@ app:
       type: cadip
     mti:
       type: cadip
+    s3rspy:
+      type: s3
 
   # -- Bucket configuration to use to monitor the lifespan and name of data buckets
   # Use an external configuration through an external configmap with the value "externalCatalogBucketConfigMapName"
