@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2a15] - 2025-07-04
+
+### Added
+
+- [RSPY-659](https://github.com/RS-PYTHON/rs-server-deployment/pull/10) : Create staging dask cluster automaticaly
+
+### Changed
+
+- [RSPY-697](https://github.com/RS-PYTHON/rs-server-deployment/pull/9) : Update nodepools
+- Bump helm chart versions
+
 ## [0.2a14] - 2025-06-10
 
 ### Changed
