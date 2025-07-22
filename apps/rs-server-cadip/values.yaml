@@ -100,7 +100,7 @@ initContainers:
       - /bin/sh
       - -c
       - |
-        until test "$(curl -XGET --silent grafana-tempo-distributor.logging.svc.cluster.local:3100/ready)" = "ready"; do echo grafana-tempo-distributor is not ready; sleep 2; done; echo grafana-tempo-distributor reached
+        until test "$(curl -XGET --silent http://alloy.monitoring.svc.cluster.local:12345/-/ready)" = "Alloy is ready."; do echo Alloy is not ready; sleep 2; done; echo Alloy reached
 
 stac_browser:
   urls: "https://stac-browser-auxip.{{ platform_domain_name }};https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"
