@@ -115,7 +115,7 @@ jobs:
           echo "k3d_latest_tag=$(curl https://api.github.com/repos/k3d-io/k3d/releases/latest -s | jq .name -r)" >> $GITHUB_ENV
         shell: bash
       - name: Start k3d
-        uses: AbsaOSS/k3d-action
+        uses: AbsaOSS/k3d-action@v2
         with:
           cluster-name: "rspy"
           #k3d-version: ${{ env.k3d_latest_tag }}
