@@ -118,7 +118,8 @@ jobs:
         uses: AbsaOSS/k3d-action
         with:
           cluster-name: "rspy"
-          k3d-version: ${{ env.k3d_latest_tag }}
+          #k3d-version: ${{ env.k3d_latest_tag }}
+          k3d-version: v5.8.3
           args: >-
             --agents 1
             --no-lb
