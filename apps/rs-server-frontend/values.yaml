@@ -47,16 +47,6 @@ affinity:
        - key: node-role.kubernetes.io/rs_server
          operator: Exists
 
-# -- Pod initContainers
-initContainers:
-  - name: init-check
-    image: alpine/curl:latest
-    command:
-      - /bin/sh
-      - -c
-      - |
-        until test "$(curl -XGET --silent http://alloy.monitoring.svc.cluster.local:12345/-/ready)" = "Alloy is ready."; do echo Alloy is not ready; sleep 2; done; echo Alloy reached
-
 # -- Pod toleration
 tolerations:
   - key: role
