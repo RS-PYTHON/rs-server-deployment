@@ -106,5 +106,15 @@ tolerations:
     value: rs_server
     effect: NoSchedule
 
+# -- Pod initContainers
+initContainers:
+  - name: init-check
+    image: alpine/curl:latest
+    command:
+      - /bin/sh
+      - -c
+      - |
+        until test "$(curl -XGET --silent http://alloy.monitoring.svc.cluster.local:12345/-/ready)" = "Alloy is ready."; do echo Alloy is not ready; sleep 2; done; echo Alloy reached
+
 stac_browser:
   urls: "https://stac-browser-auxip.{{ platform_domain_name }};https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"
