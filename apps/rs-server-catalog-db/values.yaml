@@ -17,6 +17,8 @@ app:
   pgstac_post_actions_script: 999_post_actions.sh
   # -- Script's name to download the STAC extensions schema
   pgstac_init_download_schema_script: download.sh
+  # -- Period in seconds between two data lifecycle cleaning tasks. If <0, the task is deactivated.
+  dataLifecyclePeriod: 86400 # 24 hours
   stac:
     # -- Additionnals STAC extensions
     extensions:
