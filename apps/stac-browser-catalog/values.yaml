@@ -38,6 +38,8 @@ app:
   SB_socialSharing: "email,bsky,mastodon"
   # -- URL of the STAC catalog
   SB_catalogUrl: https://{{ platform_domain_name }}/catalog/
+  # -- maxItemsPerPage - see https://github.com/radiantearth/stac-browser/pull/563
+  SB_maxItemsPerPage: "1000"
 
 # -- Pod affinity
 affinity:
