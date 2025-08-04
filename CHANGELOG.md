@@ -13,6 +13,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [0.2] - 2025-08-04
+
+### Added
+
+- [RSPY-212](https://github.com/RS-PYTHON/rs-server-deployment/pull/12) : Update from tempo to alloy
+- [RSPY-564](https://github.com/RS-PYTHON/rs-server-deployment/pull/16) : Set maxItemsPerPage=100 for CADIP/AUXIP STAC browser instances
+- [PR#15](https://github.com/RS-PYTHON/rs-server-deployment/pull/15) : Add init container to check alloy on catalog
+
+### Changed
+
+- Bump helm chart version
+
 ## [0.2a15] - 2025-07-04
 
 ### Added
