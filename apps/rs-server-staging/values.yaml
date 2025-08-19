@@ -112,7 +112,7 @@ ingress:
     # -- Ingress Issuer name
     name: letsencrypt-prod
   # -- Ingress host name
-  host: {{ platform_domain_name }}
+  host: {{ rs_server.full_domain }}
   # -- Ingress path for the application
   path:
     - /processes
