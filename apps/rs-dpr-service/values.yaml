@@ -33,7 +33,7 @@ app:
   uacUrl: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
   # -- URL of the API Key Manager home page (public)
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
-  
+
 dask:
   # -- Dask gateway address
   gateway_address: http://traefik-dask-gateway.dask-gateway.svc.cluster.local
@@ -142,7 +142,7 @@ auth:
     oidc_client_secret: "{{ apikeymanager_oidc_client_secret }}"
     # -- Random string used to encode cookie-based HTTP sessions in SessionMiddleware
     cookie_secret: "{{ rsserver_cookieSecret }}"
-    
+
 image:
   # -- Image registry
   registry: ghcr.io

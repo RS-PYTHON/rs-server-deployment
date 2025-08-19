@@ -54,11 +54,8 @@ postgres:
   port: "5432"
   # -- PostgreSQL database name
   db: {{ rs_server_catalog.database.name }}
-  host:
-    # -- PostgreSQL service URL for Read Write
-    rw: {{ rs_server_catalog.database.host }}
-    # -- PostgreSQL service URL for Read Only
-    ro: {{ rs_server_catalog.database.host }}
+  # -- PostgreSQL service URL
+  host: {{ rs_server_catalog.database.host }}
   secret:
     # -- Username to authenticate with the PostgreSQL service
     user: {{ rs_server_catalog.database.username }}
@@ -116,5 +113,6 @@ initContainers:
       - |
         until test "$(curl -XGET --silent http://alloy.monitoring.svc.cluster.local:12345/-/ready)" = "Alloy is ready."; do echo Alloy is not ready; sleep 2; done; echo Alloy reached
 
-stac_browser:
-  urls: "https://stac-browser-auxip.{{ platform_domain_name }};https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"
+cors:
+  # -- A list of origins that should be permitted to make cross-origin requests. Needed for STAC Browser
+  origins: "https://stac-browser-catalog.{{ platform_domain_name }};http://localhost:8080"

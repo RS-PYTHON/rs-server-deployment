@@ -23,5 +23,5 @@ helmCharts:
   version: 0.2.0
   valuesFile: values.yaml
 
-resources: 
+resources:
   - grafanadatasource.yaml
