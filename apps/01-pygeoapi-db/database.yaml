@@ -60,7 +60,7 @@ spec:
             secretKeyRef:
               name: postgresql-cluster-superuser
               key: port
-      affinity:  
+      affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:

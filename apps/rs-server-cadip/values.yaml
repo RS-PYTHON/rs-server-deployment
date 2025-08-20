@@ -27,11 +27,11 @@ app:
   # -- Cadip search configuration file for the application
   cadipSearchConfigFile: cadip_search_config.yaml
   # -- EODAG configuration file for the application. If useTokenModule is true the adgs_ws_config_token_module.yaml
-  # -- shall be used. When useTokenModule is false, the adgs_ws_config.yaml shall be used. 
+  # -- shall be used. When useTokenModule is false, the adgs_ws_config.yaml shall be used.
   # -- Set properly the EODAG_ADGS_CONFIG env var.
   eodagConfigFile: cadip_ws_config.yaml
   eodagConfigFileTokenModule: cadip_ws_config_token_module.yaml
-  # -- The method for loading the token for external stations: use the custom module or 
+  # -- The method for loading the token for external stations: use the custom module or
   # -- allow EODAG to handle it (set it to false for EODAG).
   useTokenModule: false
   station:
@@ -73,7 +73,7 @@ ingress:
     # -- Ingress Issuer name
     name: letsencrypt-prod
   # -- Ingress host name
-  host: {{ platform_domain_name }}
+  host: {{ rs_server.full_domain }}
   # -- Ingress path
   path: /cadip
 
@@ -102,5 +102,6 @@ initContainers:
       - |
         until test "$(curl -XGET --silent http://alloy.monitoring.svc.cluster.local:12345/-/ready)" = "Alloy is ready."; do echo Alloy is not ready; sleep 2; done; echo Alloy reached
 
-stac_browser:
-  urls: "https://stac-browser-auxip.{{ platform_domain_name }};https://stac-browser-cadip.{{ platform_domain_name }};https://stac-browser-catalog.{{ platform_domain_name }}"
+cors:
+  # -- A list of origins that should be permitted to make cross-origin requests. Needed for STAC Browser
+  origins: "https://stac-browser-cadip.{{ platform_domain_name }};http://localhost:8080"
