@@ -19,96 +19,187 @@ data:
   script.py: |
     import os
     import time
+    from typing import Any, Dict, Optional, Tuple
+
     from dask_gateway import Gateway
     from dask.distributed import Client as DaskClient
 
-    os.environ["JUPYTERHUB_API_TOKEN"] = os.environ["JUPYTERHUB_API_TOKEN"]
+    # -------- CONFIG --------
+    TARGET_CLUSTER_NAME = "dask-staging" # label value to match against scheduler_extra_pod_labels["cluster_name"]
+    TARGET_WORKERS = 2 # desired number of workers
 
-    gateway = Gateway(
-        address="http://traefik-dask-gateway.dask-gateway.svc.cluster.local",
-        auth="jupyterhub"
-    )
+    # Read token from environment
+    JUPYTERHUB_API_TOKEN = os.environ.get("JUPYTERHUB_API_TOKEN")
+    if not JUPYTERHUB_API_TOKEN:
+        raise EnvironmentError("JUPYTERHUB_API_TOKEN environment variable is not set!")
 
-    clusters = sorted(
+    GATEWAY_ADDR = "http://traefik-dask-gateway.dask-gateway.svc.cluster.local"
+    NAMESPACE = "dask-gateway"
+    IMAGE = "ghcr.io/rs-python/rs-infra-core-dask-staging:latest"
+
+    # Resource limits for *new* clusters only (reused clusters keep their existing limits)
+    WORKER_CORES = {{ rs_server_staging.dask.worker_cores }}
+    WORKER_MEM_GB = {{ rs_server_staging.dask.worker_memory }}
+    CLUSTER_MAX_WORKERS = {{ rs_server_staging.dask.cluster_max_workers }}
+    CLUSTER_MAX_CORES = {{ rs_server_staging.dask.cluster_max_cores }}
+    CLUSTER_MAX_MEMORY_BYTES = {{ rs_server_staging.dask.cluster_max_memory }}
+
+    # Scheduler scheduling constraints
+    SCHEDULER_AFFINITY = {
+        "nodeAffinity": {
+            "requiredDuringSchedulingIgnoredDuringExecution": {
+                "nodeSelectorTerms": [
+                    {
+                        "matchExpressions": [
+                            {"key": "node-role.kubernetes.io/access_csc", "operator": "Exists"}
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+    SCHEDULER_TOLERATIONS = [
+        {"key": "role", "operator": "Equal", "value": "access_csc", "effect": "NoSchedule"}
+    ]
+
+    # Worker scheduling constraints
+    WORKER_AFFINITY = {
+        "nodeAffinity": {
+            "requiredDuringSchedulingIgnoredDuringExecution": {
+                "nodeSelectorTerms": [
+                    {
+                        "matchExpressions": [
+                            {"key": "node-role.kubernetes.io/access_csc", "operator": "Exists"}
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+    WORKER_TOLERATIONS = [
+        {"key": "role", "operator": "Equal", "value": "access_csc", "effect": "NoSchedule"}
+    ]
+
+    # -------- HELPERS --------
+    def _asdict(obj: Any) -> Dict[str, Any]:
+        """Best-effort turn a cluster report into a dict-like structure."""
+        if isinstance(obj, dict):
+            return obj
+        for attr in ("model_dump", "dict"):
+            if hasattr(obj, attr):
+                v = getattr(obj, attr)
+                try:
+                    return v() if callable(v) else dict(v)
+                except Exception:
+                    pass
+        if hasattr(obj, "__dict__"):
+            return dict(getattr(obj, "__dict__"))
+        out = {}
+        for attr in ("name", "status", "start_time", "cluster_options", "options", "username"):
+            if hasattr(obj, attr):
+                out[attr] = getattr(obj, attr)
+        return out
+
+    def _get_cluster_options(report: Any) -> Dict[str, Any]:
+        rd = _asdict(report)
+        opts = rd.get("cluster_options")
+        if not isinstance(opts, dict):
+            opts = rd.get("options", {})
+        return opts if isinstance(opts, dict) else {}
+
+    def _get_report_name(report: Any) -> Optional[str]:
+        if isinstance(report, dict):
+            return report.get("name")
+        return getattr(report, "name", None)
+
+    def current_worker_count(client: DaskClient) -> int:
+        """Return current number of workers (len of workers map)."""
+        try:
+            info = client.scheduler_info() or {}
+            return len(info.get("workers", {}))
+        except Exception:
+            return 0
+
+    def wait_for_workers(client: DaskClient, target: int, timeout_s: int = 600, poll_s: int = 5) -> Tuple[bool, int]:
+        """
+        Wait until the cluster reaches target workers.
+        For scale-up: accept >= target. For scale-down: accept <= target.
+        Returns (ok, final_count).
+        """
+        start = time.time()
+        initial = current_worker_count(client)
+        scaling_up = initial < target
+        while True:
+            n = current_worker_count(client)
+            if (scaling_up and n >= target) or (not scaling_up and n <= target):
+                return True, n
+            if time.time() - start > timeout_s:
+                return False, n
+            print(f"Waiting for workers to {'increase' if scaling_up else 'decrease'}: {n} -> {target}")
+            time.sleep(poll_s)
+
+    # -------- MAIN --------
+    gateway = Gateway(address=GATEWAY_ADDR, auth="jupyterhub")
+
+    # List clusters and inspect their scheduler labels
+    reports = sorted(
         gateway.list_clusters(),
-        key=lambda cluster: cluster.start_time,
+        key=lambda r: getattr(r, "start_time", _asdict(r).get("start_time", 0)),
         reverse=True,
     )
 
-    cluster = gateway.new_cluster(
-        namespace="dask-gateway",
-        image="ghcr.io/rs-python/rs-infra-core-dask-staging:latest",
-        cluster_name="dask-staging",
-        scheduler_extra_pod_labels={"cluster_name": "dask-staging"},
-        worker_cores={{ rs_server_staging.dask.worker_cores }},
-        worker_memory={{ rs_server_staging.dask.worker_memory }},
-        cluster_max_workers={{ rs_server_staging.dask.cluster_max_workers }},
-        cluster_max_cores={{ rs_server_staging.dask.cluster_max_cores }},
-        cluster_max_memory={{ rs_server_staging.dask.cluster_max_memory }},
-        worker_extra_pod_config={
-            "affinity": {
-                "nodeAffinity": {
-                    "requiredDuringSchedulingIgnoredDuringExecution": {
-                        "nodeSelectorTerms": [
-                            {
-                                "matchExpressions": [
-                                    {
-                                        "key": "node-role.kubernetes.io/access_csc",
-                                        "operator": "Exists"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
-            },
-            "tolerations": [
-                {
-                    "key": "role",
-                    "operator": "Equal",
-                    "value": "access_csc",
-                    "effect": "NoSchedule"
-                }
-            ]
-        },
-        scheduler_extra_pod_config={
-            "affinity": {
-                "nodeAffinity": {
-                    "requiredDuringSchedulingIgnoredDuringExecution": {
-                        "nodeSelectorTerms": [
-                            {
-                                "matchExpressions": [
-                                    {
-                                        "key": "node-role.kubernetes.io/access_csc",
-                                        "operator": "Exists"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                }
-            },
-            "tolerations": [
-                {
-                    "key": "role",
-                    "operator": "Equal",
-                    "value": "access_csc",
-                    "effect": "NoSchedule"
-                }
-            ]
-        }
-    )
+    print("Existing clusters and their scheduler_extra_pod_labels:")
+    existing_match_name: Optional[str] = None
+    for r in reports:
+        opts = _get_cluster_options(r)
+        labels = opts.get("scheduler_extra_pod_labels") or {}
+        rname = _get_report_name(r)
+        print(f"  - {rname}: {labels}")
+        if isinstance(labels, dict) and labels.get("cluster_name") == TARGET_CLUSTER_NAME:
+            existing_match_name = rname
 
-    cluster.scale({{ rs_server_staging.dask.worker_count }})
+    # Reuse or create
+    if existing_match_name:
+        print(f"Reusing existing cluster with matching label cluster_name={TARGET_CLUSTER_NAME}: {existing_match_name}")
+        cluster = gateway.connect(existing_match_name)
+    else:
+        print(f"No existing cluster found with scheduler_extra_pod_labels.cluster_name={TARGET_CLUSTER_NAME}. Creating a new one.")
+        cluster = gateway.new_cluster(
+            namespace=NAMESPACE,
+            image=IMAGE,
+            cluster_name=TARGET_CLUSTER_NAME,
+            scheduler_extra_pod_labels={"cluster_name": TARGET_CLUSTER_NAME},
+            worker_cores=WORKER_CORES,
+            worker_memory=WORKER_MEM_GB,
+            cluster_max_workers=CLUSTER_MAX_WORKERS,
+            cluster_max_cores=CLUSTER_MAX_CORES,
+            cluster_max_memory=CLUSTER_MAX_MEMORY_BYTES,
+            worker_extra_pod_config={"affinity": WORKER_AFFINITY, "tolerations": WORKER_TOLERATIONS},
+            scheduler_extra_pod_config={"affinity": SCHEDULER_AFFINITY, "tolerations": SCHEDULER_TOLERATIONS},
+        )
+
+    # Connect client
     client = cluster.get_client()
 
-    tries = 0
+    # --- Ensure desired number of workers ---
+    current = current_worker_count(client)
+    print(f"Current worker count: {current}. Target: {TARGET_WORKERS}")
+
+    if current != TARGET_WORKERS:
+        print(f"Scaling cluster to {TARGET_WORKERS} workers...")
+        try:
+            cluster.scale(TARGET_WORKERS)  # Will respect gateway-side max worker limits
+        except Exception as e:
+            raise RuntimeError(f"Failed to request scale to {TARGET_WORKERS} workers: {e}")
+
+        ok, final = wait_for_workers(client, TARGET_WORKERS, timeout_s=600, poll_s=10)
+        print(f"Scale result: {'OK' if ok else 'TIMEOUT'} (workers={final})")
+        if not ok:
+            raise TimeoutError(f"Timeout waiting for workers to reach target {TARGET_WORKERS} (last={final})")
+    else:
+        print("Cluster already at desired worker count; no scaling needed.")
+
+    # Keep alive (optional)
     while True:
-        scaled = len(client.scheduler_info()["workers"])
-        print(f"Dask workers are up: {scaled}/{{ rs_server_staging.dask.worker_count }}")
-        if scaled >= {{ rs_server_staging.dask.worker_count }}:
-            break
-        tries += 1
-        if tries >= 60:
-            raise TimeoutError(f"Timeout waiting for workers: {scaled}/{{ rs_server_staging.dask.worker_count }}")
-        time.sleep(5)
+        print(f"[heartbeat] workers={current_worker_count(client)} target={TARGET_WORKERS}")
+        time.sleep(30)
