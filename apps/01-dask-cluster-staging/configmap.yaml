@@ -26,7 +26,7 @@ data:
 
     # -------- CONFIG --------
     TARGET_CLUSTER_NAME = "dask-staging" # label value to match against scheduler_extra_pod_labels["cluster_name"]
-    TARGET_WORKERS = 2 # desired number of workers
+    TARGET_WORKERS = {{ rs_server_staging.dask.worker_count }} # desired number of workers
 
     # Read token from environment
     JUPYTERHUB_API_TOKEN = os.environ.get("JUPYTERHUB_API_TOKEN")
@@ -203,3 +203,4 @@ data:
     while True:
         print(f"[heartbeat] workers={current_worker_count(client)} target={TARGET_WORKERS}")
         time.sleep(30)
+
