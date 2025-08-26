@@ -39,7 +39,11 @@ spec:
         envFrom:
         - secretRef:
             name: dask-cluster-staging
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
       volumes:
       - configMap:
           name: dask-cluster-script
         name: script-volume
+
