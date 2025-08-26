@@ -38,7 +38,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          path: rs-workflow-env
+          path: rs-server-deployment
       - name: Install requirements
         run: |
           # Install miniforge
