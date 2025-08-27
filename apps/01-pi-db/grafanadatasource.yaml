@@ -15,23 +15,23 @@
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDatasource
 metadata:
-  name: {{ rs_server_catalog.database.name }}
+  name: {{ rs_performance_indicator.database.name }}
 spec:
   instanceSelector:
     matchLabels:
       dashboards: "grafana"
   allowCrossNamespaceImport: true
   datasource:
-    name: Postgres-RScatalog
+    name: Postgres-performance
     type: postgres
     access: proxy
-    url: {{ rs_server_catalog.database.host }}
-    user: {{ rs_server_catalog.database.username }}
+    url: {{ rs_performance_indicator.database.host }}
+    user:  {{ rs_performance_indicator.database.username }}
     secureJsonData:
-      password: '{{ rs_server_catalog.database.password }}'
+      password: '{{ rs_performance_indicator.database.password }}'
     isDefault: false
     jsonData:
-      database: {{ rs_server_catalog.database.name }}
-      sslmode: disable
+      database: {{ rs_performance_indicator.database.name }}
+      sslmode: require
       "tlsSkipVerify": true
       "timeInterval": "5s"
