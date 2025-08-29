@@ -18,7 +18,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Added
 
 - [RSPY-735](https://github.com/RS-PYTHON/rs-server-deployment/pull/18) : Add the creation of performance indicator database
-- [RSPY-667](https://github.com/RS-PYTHON/rs-server-deployment/pull/19) : Update to stac-fastapi-pgstac 6.0.0 
+- [RSPY-667](https://github.com/RS-PYTHON/rs-server-deployment/pull/19) : Update to stac-fastapi-pgstac 6.0.0
+- Added mockup-station-prip
+
+### Changed
+
+- Bump Helm Charts version
 
 ### Fixed
 
