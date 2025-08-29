@@ -13,6 +13,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a1] - 2025-08-29
+
+### Added
+
+- [RSPY-735](https://github.com/RS-PYTHON/rs-server-deployment/pull/18) : Add the creation of performance indicator database
+- [RSPY-667](https://github.com/RS-PYTHON/rs-server-deployment/pull/19) : Update to stac-fastapi-pgstac 6.0.0
+- Added mockup-station-prip
+
+### Changed
+
+- Bump Helm Charts version
+
+### Fixed
+
+- [PR#21](https://github.com/RS-PYTHON/rs-server-deployment/pull/21) : Add missing and new Grafana Datasources
+- [PR#20](https://github.com/RS-PYTHON/rs-server-deployment/pull/20) : Fix Dask staging cluster creation cript
+
 ## [0.2] - 2025-08-04
 
 ### Added
