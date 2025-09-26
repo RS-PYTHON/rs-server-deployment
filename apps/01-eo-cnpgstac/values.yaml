@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-commonLabels:
-  wait-for-deployment: Ready
-
 ## @section CloudNative PostGIS parameters
 cnpgstac:
   ## @param cnpgstac.enabled Enabled CloudNative PostGIS
@@ -22,6 +19,9 @@ cnpgstac:
 
   ## @param cnpgstac.clusterName Name of the cnpgstac cluster
   clusterName: cnpgstac
+
+  clusterLabels:
+    wait-for-deployment: Ready
 
   ## Define postgres user password
   ## ref: https://cloudnative-pg.io/documentation/current/security/#postgresql
@@ -88,7 +88,7 @@ cnpgstac:
 
     ## Enable readonly mode in pgstac
     ## If true, usage of titiler-pgstac is limited
-    ## ref: https://github.com/stac-utils/pgstac/pull/215 and https://github.com/stac-utils/pgstac/issues/296 
+    ## ref: https://github.com/stac-utils/pgstac/pull/215 and https://github.com/stac-utils/pgstac/issues/296
     enableReadOnly: true
 
   ## CloudNative PostGIS resource requests and limits
