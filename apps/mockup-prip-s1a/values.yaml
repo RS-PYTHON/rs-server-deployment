@@ -1,0 +1,40 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# -- Namespace for the deployment
+namespace: processing
+
+app:
+  # -- Bucket name to stage data from
+  bucketName: {{ rs_station_mockup.prip.s1a.bucketName}}
+  # -- Path inside the bucket to the data
+  bucketPath: {{ rs_station_mockup.prip.s1a.bucketPath}}
+
+# -- Pod affinity
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/rs_server
+         operator: Exists
+
+# -- Pod toleration
+tolerations:
+  - key: role
+    value: rs_server
+    effect: NoSchedule
+
+volume:
+  storageClassName: csi-cinder-high-speed-retain

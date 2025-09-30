@@ -32,6 +32,8 @@ app:
   endpointCadip: https://{{ platform_domain_name }}/cadip
    # -- Adgs server pod address
   endpointAdgs: https://{{ platform_domain_name }}/auxip
+  # -- Prip server pod address
+  endpointPrip: https://{{ platform_domain_name }}/prip
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
   station:

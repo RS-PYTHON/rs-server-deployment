@@ -12,23 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# -- Namespace for the deployment
+commonLabels:
+  app.kubernetes.io/instance: "{{ app_name }}"
 namespace: processing
 
-# -- Pod affinity
-affinity:
-  nodeAffinity:
-   requiredDuringSchedulingIgnoredDuringExecution:
-     nodeSelectorTerms:
-     - matchExpressions:
-       - key: node-role.kubernetes.io/rs_server
-         operator: Exists
-
-# -- Pod toleration
-tolerations:
-  - key: role
-    value: rs_server
-    effect: NoSchedule
-
-volume:
-  storageClassName: csi-cinder-high-speed-retain
+helmCharts:
+- name: mockup-station-prip
+  repo: https://rs-python.github.io/rs-helm
+  releaseName: "{{ app_name }}"
+  version: 1.0.0-a2
+  valuesFile: values.yaml
