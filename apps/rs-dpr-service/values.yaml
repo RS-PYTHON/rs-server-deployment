@@ -39,13 +39,6 @@ dask:
   gateway_address: http://traefik-dask-gateway.dask-gateway.svc.cluster.local
   # -- Dask gateway auth type
   gateway_auth_type: jupyterhub
-  # -- Jupyter API Token when dask.jupyterhub=jupyterhub
-  jupyterhub_api_token: {{ rs_server_staging.jupyterhub_token }}
-  # -- Dask cluster name
-  clusterNames:
-    RSPY_DASK_MOCKUP_CLUSTER_NAME: dask-eopf-mockup
-    RSPY_DASK_L0_CLUSTER_NAME: dask-l0
-    RSPY_DASK_S1ARD_CLUSTER_NAME: dask-s1ard
 
 probe:
   startup:
