@@ -22,7 +22,7 @@ spec:
       dashboards: "grafana"
   allowCrossNamespaceImport: true
   datasource:
-    name: Postgres-RScatalog
+    name: Postgres-cnpgstac
     type: postgres
     access: proxy
     url: {{ rs_server_catalog.database.host }}

@@ -1,0 +1,141 @@
+# Copyright 2025 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+commonLabels:
+  wait-for-deployment: Ready
+
+## @section CloudNative PostGIS parameters
+cnpgstac:
+  ## @param cnpgstac.enabled Enabled CloudNative PostGIS
+  enabled: true
+
+  ## @param cnpgstac.clusterName Name of the cnpgstac cluster
+  clusterName: cnpgstac
+
+  ## Define postgres user password
+  ## ref: https://cloudnative-pg.io/documentation/current/security/#postgresql
+  superUserAccess:
+    ## @param cnpgstac.superUserAccess.enabled Enabled PostgreSQL superuser (postgres)
+    enabled: true
+    ## @param cnpgstac.superUserAccess.existingSecret Use existing secret for superuser instead of randomly generated
+    ## ref: https://cloudnative-pg.io/documentation/current/applications/#secrets
+    existingSecret: ""
+
+  ## @param cnpgstac.instances Number of instances
+  instances: 3
+
+  bootstrap:
+    initdb:
+      database: {{ rs_server_catalog.database.name }}
+      owner: {{ rs_server_catalog.database.username }}
+      secret:
+        name: "{{ rs_server_catalog.database.name }}-database-password"
+
+  backup:
+    barman:
+      enabled: true
+      isWALArchiver: true
+      barmanObjectStore:
+        name: cnpgstac
+        configuration:
+          destinationPath: s3://{{ postgresql.bucket }}/cnpgstac/
+          endpointURL: {{ s3.endpoint }}
+          s3Credentials:
+            secretName: cnpgstac-backup-obs
+            accessKeyId: {{ s3.access_key }}
+            secretAccessKey: {{ s3.secret_key }}
+          # -- Compression
+          # -- Supported Compression Algorithms : https://cloudnative-pg.io/plugin-barman-cloud/docs/compression/#supported-compression-algorithms
+          wal:
+            compression: none # Possible values are none, bzip2, gzip, lz4, snappy, xz and zstd
+          data:
+            compression: none # Possible values are none, bzip2, gzip, snappy
+        retentionPolicy: 10d
+
+  custom:
+    enabled: true
+
+    # -- Additionnals STAC extensions
+    extensions:
+      {{ rs_server_catalog_db.stac.extensions | indent( width=6, first=False) }}
+
+    # -- Additionnals queryables
+    queryables:
+      {{ rs_server_catalog_db.stac.queryables | indent( width=6, first=False) }}
+
+    #### use template to render only if needed
+    # -- Pod initContainers
+    initContainers:
+    - name: download-pgstac-extensions
+      image: alpine/curl
+      command: [ "/scripts/init/download.sh" ]
+      volumeMounts:
+        - name: download-json-schema
+          mountPath: /scripts/init/
+        - name: pgstac-json-schema
+          mountPath: /opt/pgstac_json_schema/
+
+    ## Enable readonly mode in pgstac
+    ## If true, usage of titiler-pgstac is limited
+    ## ref: https://github.com/stac-utils/pgstac/pull/215 and https://github.com/stac-utils/pgstac/issues/296 
+    enableReadOnly: true
+
+  ## CloudNative PostGIS resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param cnpgstac.resources.limits The resources limits for the CloudNative PostGIS containers
+  ## @param cnpgstac.resources.requests The requested resources for the CloudNative PostGIS containers
+  ##
+  resources:
+    requests:
+      memory: "1024M"
+      cpu: "1"
+    limits:
+      memory: "2G"
+      cpu: "2"
+
+  ## PostgreSQL Primary persistence configuration
+  ##
+  persistence:
+    ## @param primary.persistence.enabled Enable PostgreSQL Primary data persistence using PVC
+    ##
+    enabled: true
+    storageClass: csi-cinder-high-speed-retain
+    ## @param primary.persistence.accessModes PVC Access Mode for PostgreSQL volume
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param primary.persistence.size PVC Storage Request for PostgreSQL volume
+    ##
+    size: 8Gi
+
+
+  ## @param cnpgstac.affinity Affinity for CloudNative PostGIS pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: "node-role.kubernetes.io/rs_server"
+              operator: Exists
+
+  ## @param cnpgstac.tolerations Tolerations for CloudNative PostGIS pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations:
+    - effect: NoSchedule
+      key: role
+      value: rs_server
