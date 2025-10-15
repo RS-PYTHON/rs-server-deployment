@@ -15,10 +15,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: {{ .Values.cnpgstac.clusterName }}
+  name: cnpgstac
 spec:
   selector:
     matchLabels:
-      "cnpg.io/cluster": {{ .Values.cnpgstac.clusterName }}
+      "cnpg.io/cluster": cnpgstac
   podMetricsEndpoints:
   - port: metrics
