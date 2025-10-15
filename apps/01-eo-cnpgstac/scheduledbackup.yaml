@@ -15,7 +15,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: ScheduledBackup
 metadata:
-  name: backup-{{ .Values.cnpgstac.clusterName }}-cluster
+  name: "backup-{{ .Values.cnpgstac.clusterName }}-cluster"
   labels:
     wait-for-deployment: Ready
 spec:
