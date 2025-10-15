@@ -27,3 +27,4 @@ resources:
   - grafanadatasource.yaml
   - podmonitor.yaml
   - scheduledbackup.yaml
+  - secret.yaml
