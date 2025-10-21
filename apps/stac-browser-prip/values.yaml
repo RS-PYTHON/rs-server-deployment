@@ -37,7 +37,7 @@ app:
   # -- Social sharing
   SB_socialSharing: "email,bsky,mastodon"
   # -- URL of the STAC catalog
-  SB_catalogUrl: https://{{ platform_domain_name }}/cadip/
+  SB_catalogUrl: https://{{ platform_domain_name }}/prip/
   # -- maxItemsPerPage - see https://github.com/radiantearth/stac-browser/pull/563
   SB_maxItemsPerPage: 100
 
@@ -65,7 +65,7 @@ ingress:
     # -- Ingress Issuer name
     name: letsencrypt-prod
   # -- Ingress host name.
-  host: stac-browser-cadip.{{ platform_domain_name }}
+  host: stac-browser-prip.{{ platform_domain_name }}
   # -- Ingress path for the application
   # Note that because of bug https://github.com/radiantearth/stac-browser/issues/479 the path is forced to /
   path: /
