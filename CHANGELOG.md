@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 ### Changed
 
 - [RSPY-25](https://github.com/RS-PYTHON/rs-server-deployment/pull/25) : Pass cluster info from client to rs-dpr-service
+- Bump helm chart version
 
 ## [1.0a2] - 2025-09-29
 
