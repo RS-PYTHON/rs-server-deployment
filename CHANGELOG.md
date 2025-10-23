@@ -13,6 +13,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a3] - 2025-10-23
+
+### Added
+
+- [RSPY-759](https://github.com/RS-PYTHON/rs-server-deployment/pull/28) : add stac browser for PRIP
+- [RSPY-226](https://github.com/RS-PYTHON/rs-server-deployment/pull/27) : Enable HA for pgstac catalog database
+
+### Changed
+
+- [RSPY-25](https://github.com/RS-PYTHON/rs-server-deployment/pull/25) : Pass cluster info from client to rs-dpr-service
+- Bump helm chart version
+
 ## [1.0a2] - 2025-09-29
 
 ### Added
