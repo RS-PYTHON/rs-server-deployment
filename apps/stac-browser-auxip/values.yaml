@@ -63,7 +63,7 @@ ingress:
     # -- Ingress Issuer type
     type: cluster-issuer
     # -- Ingress Issuer name
-    name: letsencrypt-prod
+    name: "{{ cluster_issuer }}"
   # -- Ingress host name.
   host: stac-browser-auxip.{{ platform_domain_name }}
   # -- Ingress path for the application

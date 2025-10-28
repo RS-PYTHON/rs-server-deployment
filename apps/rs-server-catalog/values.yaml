@@ -80,13 +80,25 @@ ingress:
     # -- Ingress Issuer type
     type: cluster-issuer
     # -- Ingress Issuer name
-    name: letsencrypt-prod
+    name: "{{ cluster_issuer }}"
   # -- Ingress host name
   host: {{ rs_server.full_domain }}
   # -- Ingress path
   path:
     - /catalog
     - /auth
+
+resources:
+  request:
+    # -- Pod memory request
+    ram: "256Mi"
+    # -- Pod CPU request
+    cpu: "100m"
+  limit:
+    # -- Pod memory limit
+    ram: "1000Mi"
+    # -- Pod CPU limit
+    cpu: "500m"
 
 # -- Pod affinity
 affinity:

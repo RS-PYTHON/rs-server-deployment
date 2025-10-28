@@ -203,4 +203,3 @@ data:
     while True:
         print(f"[heartbeat] workers={current_worker_count(client)} target={TARGET_WORKERS}")
         time.sleep(30)
-

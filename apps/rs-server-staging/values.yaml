@@ -49,13 +49,13 @@ app:
       type: s3
 
   # -- Bucket configuration to use to monitor the lifespan and name of data buckets
-  # Use an external configuration through an external configmap with the value "externalCatalogBucketConfigMapName"
+  # Use an external configuration through an external configmap with the value "externalStagingBucketConfigMapName"
   # OR
   # Set your own configuration in the value expirationBucketCsv
   bucketConfig:
     # -- Set to true to use an external configmap for the configuration instead of the one set in expirationBucketCsv
     useExternalStagingBucketConfigMap: true
-    # -- Name of the external configmap to use. Used only if useExternalCatalogBucketConfigMap is true
+    # -- Name of the external configmap to use. Used only if useExternalStagingBucketConfigMap is true
     externalStagingBucketConfigMapName: "rs-catalog-staging-configmap"
 
 dask:
@@ -112,13 +112,25 @@ ingress:
     # -- Ingress Issuer type
     type: cluster-issuer
     # -- Ingress Issuer name
-    name: letsencrypt-prod
+    name: "{{ cluster_issuer }}"
   # -- Ingress host name
   host: {{ rs_server.full_domain }}
   # -- Ingress path for the application
   path:
     - /processes
     - /jobs
+
+resources:
+  request:
+    # -- Pod memory request
+    ram: "256Mi"
+    # -- Pod CPU request
+    cpu: "100m"
+  limit:
+    # -- Pod memory limit
+    ram: "1000Mi"
+    # -- Pod CPU limit
+    cpu: "500m"
 
 # -- Pod affinity
 affinity:

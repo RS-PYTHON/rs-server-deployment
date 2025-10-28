@@ -15,6 +15,18 @@
 # -- Namespace for the deployment
 namespace: processing
 
+resources:
+  request:
+    # -- Pod memory request
+    ram: "256Mi"
+    # -- Pod CPU request
+    cpu: "100m"
+  limit:
+    # -- Pod memory limit
+    ram: "1000Mi"
+    # -- Pod CPU limit
+    cpu: "500m"
+
 # -- Pod affinity
 affinity:
   nodeAffinity:

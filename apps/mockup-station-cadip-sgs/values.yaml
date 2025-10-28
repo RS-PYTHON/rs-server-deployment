@@ -21,6 +21,18 @@ app:
   # -- Path inside the bucket to the data
   bucketPath: {{ rs_station_mockup.cadip.sgs.bucketPath}}
 
+resources:
+  request:
+    # -- Pod memory request
+    ram: "256Mi"
+    # -- Pod CPU request
+    cpu: "100m"
+  limit:
+    # -- Pod memory limit
+    ram: "1000Mi"
+    # -- Pod CPU limit
+    cpu: "500m"
+
 # -- Pod affinity
 affinity:
   nodeAffinity:

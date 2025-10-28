@@ -46,4 +46,3 @@ spec:
       - configMap:
           name: dask-cluster-script
         name: script-volume
-
