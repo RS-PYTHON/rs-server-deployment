@@ -19,8 +19,7 @@ helmCharts:
   releaseName: '{{ app_name }}'
   repo: https://rs-python.github.io/rs-helm
   valuesFile: values.yaml
-  version: 1.0.0-a3
-
+  version: 1.0.0-a3-1207f2b
 
 resources:
 - grafanadatasource.yaml
