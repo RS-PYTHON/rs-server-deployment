@@ -121,4 +121,4 @@ initContainers:
 
 cors:
   # -- A list of origins that should be permitted to make cross-origin requests. Needed for STAC Browser
-  origins: '["https://stac-browser-prip.{{ platform_domain_name }}","http://localhost:8080"]'
+  origins: {% raw %}'["https://stac-browser-prip.{% endraw %}{{ platform_domain_name }}{% raw %}","http://localhost:8080"]'{% endraw %}
