@@ -82,12 +82,10 @@ jobs:
             ~/miniforge3
             /usr/share/miniconda
           key: conda-${{ runner.os }}-${{ hashFiles('.github/common/resources/install-requirements.sh') }}
-          restore-keys: |
-            conda-${{ runner.os }}-
       - name: Aggressive cleanup
         run: |
           # Cleanup disk space (level between 0 and 14, more cleaning takes more time)
-          .github/common/resources/aggressive-cleanup.sh 2
+          .github/common/resources/aggressive-cleanup.sh 6
         shell: bash
       - name: Install requirements (if cache missed)
         if: steps.cache-conda.outputs.cache-hit != 'true'
