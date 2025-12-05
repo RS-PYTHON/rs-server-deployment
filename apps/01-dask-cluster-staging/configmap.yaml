@@ -35,7 +35,7 @@ data:
 
     GATEWAY_ADDR = "http://traefik-dask-gateway.dask-gateway.svc.cluster.local"
     NAMESPACE = "dask-gateway"
-    IMAGE = "ghcr.io/rs-python/rs-infra-core-dask-staging:latest"
+    IMAGE = "ghcr.io/rs-python/dask/staging:latest"
 
     # Resource limits for *new* clusters only (reused clusters keep their existing limits)
     WORKER_CORES = {{ rs_server_staging.dask.worker_cores }}
