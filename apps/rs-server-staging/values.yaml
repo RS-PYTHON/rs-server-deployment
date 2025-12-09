@@ -34,6 +34,8 @@ app:
   endpointAdgs: https://{{ platform_domain_name }}/auxip
   # -- Prip server pod address
   endpointPrip: https://{{ platform_domain_name }}/prip
+  # -- Osam pod address (used to retrieve bucket configurations)
+  endpointOsam: http://rs-osam.processing.svc.cluster.local:8080
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
   station:
@@ -47,16 +49,6 @@ app:
       type: cadip
     s3rspy:
       type: s3
-
-  # -- Bucket configuration to use to monitor the lifespan and name of data buckets
-  # Use an external configuration through an external configmap with the value "externalStagingBucketConfigMapName"
-  # OR
-  # Set your own configuration in the value expirationBucketCsv
-  bucketConfig:
-    # -- Set to true to use an external configmap for the configuration instead of the one set in expirationBucketCsv
-    useExternalStagingBucketConfigMap: true
-    # -- Name of the external configmap to use. Used only if useExternalStagingBucketConfigMap is true
-    externalStagingBucketConfigMapName: "rs-catalog-staging-configmap"
 
 dask:
   # -- Dask gateway address
