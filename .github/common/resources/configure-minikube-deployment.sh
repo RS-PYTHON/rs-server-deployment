@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-APPS=rs-server-deployment/apps
+APPS="${APPS_DIR:-rs-server-deployment/apps}"
 
 # Lower the CPU/memory requests
 # Minimum memory for postgresql must be > shared_buffers, which is 1/4 of the total ram
