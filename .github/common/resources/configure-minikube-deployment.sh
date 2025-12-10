@@ -20,15 +20,7 @@ APPS="${APPS_DIR:-rs-server-deployment/apps}"
 # Lower the CPU/memory requests
 # Minimum memory for postgresql must be > shared_buffers, which is 1/4 of the total ram
 sed -i -e 's!instances: 3!instances: 1!g' -e 's!cpu: "1"!cpu: "0.1"!g' -e 's!memory: "2G"!memory: "256M"!g' -e 's!memory: "1024M"!memory: "100M"!g' "${APPS}/01-eo-cnpgstac/values.yaml"
-sed -i -e 's!cpu: "100m"!cpu: "1m"!g' -e 's!ram: "256Mi"!ram: "10Mi"!g'\
-  "${APPS}/mockup-prip-s1a/values.yaml"\
-  "${APPS}/mockup-prip-s2b/values.yaml"\
-  "${APPS}/mockup-processor-dpr/values.yaml"\
-  "${APPS}/mockup-station-adgs/values.yaml"\
-  "${APPS}/mockup-station-cadip-cadip/values.yaml"\
-  "${APPS}/mockup-station-cadip-mti/values.yaml"\
-  "${APPS}/mockup-station-cadip-sgs/values.yaml"\
-  "${APPS}/mockup-station-lta/values.yaml"
+sed -i -e 's!cpu: "100m"!cpu: "1m"!g' -e 's!ram: "256Mi"!ram: "10Mi"!g' ${APPS}/mockup-*/values.yaml || echo "no mockup found"
 sed -i -e 's!cpu: "100m"!cpu: "10m"!g' -e 's!ram: "256Mi"!ram: "32Mi"!g'\
   "${APPS}/rs-dpr-service/values.yaml"\
   "${APPS}/rs-server-adgs/values.yaml"\
