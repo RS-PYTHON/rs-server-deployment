@@ -19,4 +19,5 @@
 
 namespace: processing
 app:
-  stations: {{ rs_server_station_secrets.stations | indent( width=4, first=False) }}
+  stations:
+    {{ rs_server_station_secrets.stations | indent( width=4, first=False) }}
