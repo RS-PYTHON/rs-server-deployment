@@ -12,11 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# THIS FILE WAS AUTOMATICALLY CREATED FROM:
-#  - rs-server/services/common/config/rs-server.template.yaml
-#  - rs-server/resources/sync_config_files.py
-# DON'T MODIFY IT DIRECTLY !
-
 namespace: processing
-app:
-  stations: {{ rs_server_station_secrets.stations | indent( width=4, first=False) }}
+
+helmCharts:
+- name: rs-server-edrs
+  releaseName: '{{ app_name }}'
+  repo: https://rs-python.github.io/rs-helm
+  valuesFile: values.yaml
+  version: 1.0.0-a3-1207f2b
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'
