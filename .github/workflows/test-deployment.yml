@@ -54,7 +54,7 @@ jobs:
           fi
         shell: bash
       - name: Checkout infra-core repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: RS-PYTHON/rs-infra-core
           ref: ${{ steps.check_branch.outputs.branch_to_use }}
@@ -65,7 +65,7 @@ jobs:
           path: rs-infra-monitoring
           repository: RS-PYTHON/rs-infra-monitoring
       - name: Checkout workflow-env repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: rs-workflow-env
           repository: RS-PYTHON/rs-workflow-env
