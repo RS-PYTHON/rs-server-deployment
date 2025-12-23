@@ -1,0 +1,115 @@
+# Copyright 2024 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# -- Namespace for the deployment
+namespace: processing
+
+# -- Number of replicas for the deployment
+replicaCount: 1
+
+service:
+  # -- Port for the service
+  port: 8080
+
+app:
+  # -- Port for the application
+  port: 8000
+  # -- Config directory for the application
+  confDir: /app/conf
+  edrsSearchConfigFile: edrs_search_config.yaml
+  edrsStations: edrs_stations.yaml
+  # -- The way the token for the external stations is loaded: own module or let eodag to do it (set it to false)
+  useTokenModule: false
+  useSSL: true
+  # -- URL of the API Key Manager service
+  uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
+
+auth:
+  secret:
+    # -- OIDC End Point
+    oidc_endpoint: "https://iam.{{ platform_domain_name }}"
+    # -- OIDC Realm
+    oidc_realm: "rspy"
+    # -- OIDC CLient ID
+    oidc_client_id: "apikeymanager"
+    # -- OIDC Secret used to sync user info from Keycloak
+    oidc_client_secret: "{{ apikeymanager_oidc_client_secret }}"
+    # -- Random string used to encode cookie-based HTTP sessions in SessionMiddleware
+    cookie_secret: "{{ rsserver_cookieSecret }}"
+
+obs:
+  # -- URL of the object storage service endpoint
+  endpoint: {{ s3.endpoint }}
+  # -- Region of the object storage service
+  region: {{ s3.region }}
+  secret:
+    # -- Access Key to authenticate with the object storage service
+    ak: {{ s3.access_key }}
+    # -- Secret Key to authenticate with the object storage service
+    sk: {{ s3.secret_key }}
+
+ingress:
+  # -- Enabled/Disable ingress
+  enabled: true
+  issuer:
+    # -- Ingress Issuer type
+    type: cluster-issuer
+    # -- Ingress Issuer name
+    name: "{{ cluster_issuer }}"
+  # -- Ingress host name
+  host: {{ rs_server.full_domain }}
+  # -- Ingress path
+  path:
+    - /edrs
+
+resources:
+  request:
+    # -- Pod memory request
+    ram: "256Mi"
+    # -- Pod CPU request
+    cpu: "100m"
+  limit:
+    # -- Pod memory limit
+    ram: "1000Mi"
+    # -- Pod CPU limit
+    cpu: "500m"
+
+# -- Pod affinity
+affinity:
+  nodeAffinity:
+   requiredDuringSchedulingIgnoredDuringExecution:
+     nodeSelectorTerms:
+     - matchExpressions:
+       - key: node-role.kubernetes.io/rs_server
+         operator: Exists
+
+# -- Pod toleration
+tolerations:
+  - key: role
+    value: rs_server
+    effect: NoSchedule
+
+# -- Pod initContainers
+initContainers:
+  - name: init-check
+    image: alpine/curl:latest
+    command:
+      - /bin/sh
+      - -c
+      - |
+        until test "$(curl -XGET --silent http://alloy.monitoring.svc.cluster.local:12345/-/ready)" = "Alloy is ready."; do echo Alloy is not ready; sleep 2; done; echo Alloy reached
+
+cors:
+  # -- A list of origins that should be permitted to make cross-origin requests. Needed for STAC Browser
+  origins: https://stac-browser-edrs.{{ platform_domain_name }},http://localhost:8080
