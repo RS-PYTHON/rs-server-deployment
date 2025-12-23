@@ -15,7 +15,7 @@
 namespace: processing
 
 helmCharts:
-- name: mockup-station-drs
+- name: mockup-station-edrs
   releaseName: '{{ app_name }}'
   repo: https://rs-python.github.io/rs-helm
   valuesFile: values.yaml
