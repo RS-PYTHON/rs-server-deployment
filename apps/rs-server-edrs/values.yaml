@@ -32,15 +32,6 @@ app:
   # -- The way the token for the external stations is loaded: own module or let eodag to do it (set it to false)
   useTokenModule: false
   useSSL: true
-  station:
-    pedc:
-      endpoint:
-        # -- EDRS PEDC station URL
-        url: TO be added
-    bedc:
-      endpoint:
-        # -- EDRS BEDC station URL
-        url: TO be added
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
 
@@ -75,9 +66,9 @@ ingress:
     # -- Ingress Issuer type
     type: cluster-issuer
     # -- Ingress Issuer name
-    name: letsencrypt-prod
+    name: "{{ cluster_issuer }}"
   # -- Ingress host name
-  host: subdomain.example.com
+  host: {{ rs_server.full_domain }}
   # -- Ingress path
   path:
     - /edrs
@@ -121,4 +112,4 @@ initContainers:
 
 cors:
   # -- A list of origins that should be permitted to make cross-origin requests. Needed for STAC Browser
-  origins: 'https://stac-browser-edrs.{{ platform_domain_name }},http://localhost:8080'
+  origins: https://stac-browser-edrs.{{ platform_domain_name }},http://localhost:8080
