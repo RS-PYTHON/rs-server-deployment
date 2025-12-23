@@ -34,6 +34,8 @@ app:
   useSSL: true
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
+  station:
+    {{ rs_server_edrs_stations | indent( width=4, first=False) }}
 
 auth:
   secret:

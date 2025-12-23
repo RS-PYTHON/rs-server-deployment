@@ -175,8 +175,6 @@ resources:
     # -- Pod CPU limit
     cpu: "500m"
 
-
-
 otel:
   # -- Trace request headers with OpenTelemetry ?
   trace_headers: false

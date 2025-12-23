@@ -13,6 +13,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a5] - 2025-12-23
+
+### Added
+
+- [RSPY-808](https://github.com/RS-PYTHON/rs-server-deployment/pull/36) : rs-server-edrs
+
+### Changed
+
+- [PR#33](https://github.com/RS-PYTHON/rs-server-deployment/pull/33) : Improve CICD robustness
+- [PR#34](https://github.com/RS-PYTHON/rs-server-deployment/pull/34) : Remove the bucket configuration
+- [PR#37](https://github.com/RS-PYTHON/rs-server-deployment/pull/37) : allow to define APPS_DIR outside of github action scripts
+- [PR#38](https://github.com/RS-PYTHON/rs-server-deployment/pull/38) : Add robustness to missing mockups
+- [PR#32](https://github.com/RS-PYTHON/rs-server-deployment/pull/32) : Upgrade to Python 3.13
+- Bump helm chart version
+
 ## [1.0a3] - 2025-10-23
 
 ### Added
