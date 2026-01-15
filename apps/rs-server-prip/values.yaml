@@ -39,7 +39,27 @@ app:
   # -- The way the token for the external stations is loaded: own module or let eodag to do it (set it to false)
   useTokenModule: false
   station:
-    {{ rs_server_prip_station | indent( width=4, first=False) }}
+    s1a:
+      endpoint:
+        url: {{ rs_server_station_secrets.stations.s1a.service.url }}
+    s1c:
+      endpoint:
+        url: {{ rs_server_station_secrets.stations.s1c.service.url }}
+    #s2a:
+    #  endpoint:
+    #    url: {{ rs_server_station_secrets.stations.s2a.service.url }}
+    s2b:
+      endpoint:
+        url: {{ rs_server_station_secrets.stations.s2b.service.url }}
+    s2c:
+      endpoint:
+        url: {{ rs_server_station_secrets.stations.s2c.service.url }}
+    s3a:
+      endpoint:
+        url: {{ rs_server_station_secrets.stations.s3a.service.url }}
+    s3b:
+      endpoint:
+        url: {{ rs_server_station_secrets.stations.s3b.service.url }}
 
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key

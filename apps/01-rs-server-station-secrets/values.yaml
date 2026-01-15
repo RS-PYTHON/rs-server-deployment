@@ -20,4 +20,303 @@
 namespace: processing
 app:
   stations:
-    {{ rs_server_station_secrets.stations | indent( width=4, first=False) }}
+    cdse:
+      service:
+        name: {{ rs_server_station_secrets.stations.cdse.service.name }}
+        url: {{ rs_server_station_secrets.stations.cdse.service.url }}
+      domain: {{ rs_server_station_secrets.stations.cdse.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.cdse.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.cdse.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.cdse.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.cdse.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.cdse.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.cdse.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.cdse.authentication.client_id }}
+        authorization: {{ rs_server_station_secrets.stations.cdse.authentication.authorization }}
+      trusteddomains: {{ rs_server_station_secrets.stations.cdse.trusteddomains }}
+    adgs:
+      service:
+        name: {{ rs_server_station_secrets.stations.adgs.service.name }}
+        url: {{ rs_server_station_secrets.stations.adgs.service.url }}
+      domain: {{ rs_server_station_secrets.stations.adgs.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.adgs.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.adgs.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.adgs.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.adgs.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.adgs.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.adgs.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.adgs.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.adgs.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.adgs.authentication.authorization }}
+    ############
+    # Stations #
+    ############
+    ssc:
+      service:
+        name: {{ rs_server_station_secrets.stations.ssc.service.name }}
+        url: {{ rs_server_station_secrets.stations.ssc.service.url }}
+      domain: {{ rs_server_station_secrets.stations.ssc.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.ssc.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.ssc.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.ssc.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.ssc.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.ssc.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.ssc.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.ssc.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.ssc.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.ssc.authentication.authorization }}
+    ins:
+      service:
+        name: {{ rs_server_station_secrets.stations.ins.service.name }}
+        url: {{ rs_server_station_secrets.stations.ins.service.url }}
+      domain: {{ rs_server_station_secrets.stations.ins.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.ins.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.ins.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.ins.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.ins.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.ins.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.ins.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.ins.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.ins.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.ins.authentication.authorization }}
+    mps:
+      service:
+        name: {{ rs_server_station_secrets.stations.mps.service.name }}
+        url: {{ rs_server_station_secrets.stations.mps.service.url }}
+      domain: {{ rs_server_station_secrets.stations.mps.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.mps.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.mps.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.mps.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.mps.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.mps.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.mps.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.mps.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.mps.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.mps.authentication.authorization }}
+    mti:
+      service:
+        name: {{ rs_server_station_secrets.stations.mti.service.name }}
+        url: {{ rs_server_station_secrets.stations.mti.service.url }}
+      domain: {{ rs_server_station_secrets.stations.mti.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.mti.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.mti.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.mti.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.mti.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.mti.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.mti.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.mti.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.mti.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.mti.authentication.authorization }}
+    nsg:
+      service:
+        name: {{ rs_server_station_secrets.stations.nsg.service.name }}
+        url: {{ rs_server_station_secrets.stations.nsg.service.url }}
+      domain: {{ rs_server_station_secrets.stations.nsg.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.nsg.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.nsg.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.nsg.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.nsg.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.nsg.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.nsg.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.nsg.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.nsg.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.nsg.authentication.authorization }}
+    sgs:
+      service:
+        name: {{ rs_server_station_secrets.stations.sgs.service.name }}
+        url: {{ rs_server_station_secrets.stations.sgs.service.url }}
+      domain: {{ rs_server_station_secrets.stations.sgs.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.sgs.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.sgs.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.sgs.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.sgs.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.sgs.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.sgs.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.sgs.authentication.client_id }}
+        authorization: {{ rs_server_station_secrets.stations.sgs.authentication.authorization }}
+      trusteddomains: {{ rs_server_station_secrets.stations.sgs.trusteddomains }}
+    kse:
+      service:
+        name: {{ rs_server_station_secrets.stations.kse.service.name }}
+        url: {{ rs_server_station_secrets.stations.kse.service.url }}
+      domain: {{ rs_server_station_secrets.stations.kse.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.kse.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.kse.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.kse.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.kse.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.kse.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.kse.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.kse.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.kse.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.kse.authentication.authorization }}
+    par:
+      service:
+        name: {{ rs_server_station_secrets.stations.par.service.name }}
+        url: {{ rs_server_station_secrets.stations.par.service.url }}
+      domain: {{ rs_server_station_secrets.stations.par.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.par.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.par.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.par.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.par.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.par.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.par.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.par.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.par.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.par.authentication.authorization }}
+    lta:
+      service:
+        name: {{ rs_server_station_secrets.stations.lta.service.name }}
+        url: {{ rs_server_station_secrets.stations.lta.service.url }}
+      domain: {{ rs_server_station_secrets.stations.lta.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.lta.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.lta.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.lta.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.lta.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.lta.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.lta.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.lta.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.lta.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.lta.authentication.authorization }}
+    ############
+    # Sentinel #
+    ############
+    s1a:
+      service:
+        name: {{ rs_server_station_secrets.stations.s1a.service.name }}
+        url: {{ rs_server_station_secrets.stations.s1a.service.url }}
+      domain: {{ rs_server_station_secrets.stations.s1a.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.s1a.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.s1a.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.s1a.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.s1a.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.s1a.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.s1a.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.s1a.authentication.client_id }}
+        authorization: {{ rs_server_station_secrets.stations.s1a.authentication.authorization }}
+    s1c:
+      service:
+        name: {{ rs_server_station_secrets.stations.s1c.service.name }}
+        url: {{ rs_server_station_secrets.stations.s1c.service.url }}
+      domain: {{ rs_server_station_secrets.stations.s1c.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.s1c.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.s1c.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.s1c.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.s1c.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.s1c.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.s1c.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.s1c.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.s1c.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.s1c.authentication.authorization }}
+      trusteddomains: {{ rs_server_station_secrets.stations.s1c.trusteddomains }}
+    s2b:
+      service:
+        name: {{ rs_server_station_secrets.stations.s2b.service.name }}
+        url: {{ rs_server_station_secrets.stations.s2b.service.url }}
+      domain: {{ rs_server_station_secrets.stations.s2b.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.s2b.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.s2b.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.s2b.authentication.grant_type }}
+        username: {{ rs_server_station_secrets.stations.s2b.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.s2b.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.s2b.authentication.client_id }}
+        authorization: {{ rs_server_station_secrets.stations.s2b.authentication.authorization }}
+    s2c:
+      service:
+        name: {{ rs_server_station_secrets.stations.s2c.service.name }}
+        url: {{ rs_server_station_secrets.stations.s2c.service.url }}
+      domain: {{ rs_server_station_secrets.stations.s2c.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.s2c.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.s2c.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.s2c.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.s2c.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.s2c.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.s2c.authentication.password }}
+        authorization: {{ rs_server_station_secrets.stations.s2c.authentication.authorization }}
+    s3a:
+      service:
+        name: {{ rs_server_station_secrets.stations.s3a.service.name }}
+        url: {{ rs_server_station_secrets.stations.s3a.service.url }}
+      domain: {{ rs_server_station_secrets.stations.s3a.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.s3a.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.s3a.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.s3a.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.s3a.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.s3a.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.s3a.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.s3a.authentication.client_id }}
+        authorization: {{ rs_server_station_secrets.stations.s3a.authentication.authorization }}
+    s3b:
+      service:
+        name: {{ rs_server_station_secrets.stations.s3b.service.name }}
+        url: {{ rs_server_station_secrets.stations.s3b.service.url }}
+      domain: {{ rs_server_station_secrets.stations.s3b.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.s3b.authentication.auth_type }}
+        token_url: {{ rs_server_station_secrets.stations.s3b.authentication.token_url }}
+        grant_type: {{ rs_server_station_secrets.stations.s3b.authentication.grant_type }}
+        scope: {{ rs_server_station_secrets.stations.s3b.authentication.scope }}
+        username: {{ rs_server_station_secrets.stations.s3b.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.s3b.authentication.password }}
+        client_id: {{ rs_server_station_secrets.stations.s3b.authentication.client_id }}
+        client_secret: {{ rs_server_station_secrets.stations.s3b.authentication.client_secret }}
+        authorization: {{ rs_server_station_secrets.stations.s3b.authentication.authorization }}
+    s3rspy:
+      service:
+        name: {{ rs_server_station_secrets.stations.s3rspy.service.name }}
+        url: {{ rs_server_station_secrets.stations.s3rspy.service.url }}
+      domain: {{ rs_server_station_secrets.stations.s3rspy.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.s3rspy.authentication.auth_type }}
+        access_key: {{ rs_server_station_secrets.stations.s3rspy.authentication.access_key }}
+        secret_key: {{ rs_server_station_secrets.stations.s3rspy.authentication.secret_key }}
+    #############
+    # PEDC/BEDC #
+    #############
+    pedc:
+      service:
+        name: {{ rs_server_station_secrets.stations.pedc.service.name }}
+        url: {{ rs_server_station_secrets.stations.pedc.service.url }}
+        port: {{ rs_server_station_secrets.stations.pedc.service.port }}
+      domain: {{ rs_server_station_secrets.stations.pedc.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.pedc.authentication.auth_type }}
+        username: {{ rs_server_station_secrets.stations.pedc.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.pedc.authentication.password }}
+        ca_crt: |
+          {{ rs_server_station_secrets.stations.pedc.authentication.ca_crt | indent( width=10, first=False) }}
+        client_crt: |
+          {{ rs_server_station_secrets.stations.pedc.authentication.client_crt | indent( width=10, first=False) }}
+        client_key: |
+          {{ rs_server_station_secrets.stations.pedc.authentication.client_key | indent( width=10, first=False) }}
+    bedc:
+      service:
+        name: {{ rs_server_station_secrets.stations.bedc.service.name }}
+        url: {{ rs_server_station_secrets.stations.bedc.service.url }}
+        port: {{ rs_server_station_secrets.stations.bedc.service.port }}
+      domain: {{ rs_server_station_secrets.stations.bedc.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.bedc.authentication.auth_type }}
+        username: {{ rs_server_station_secrets.stations.bedc.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.bedc.authentication.password }}
+        ca_crt: |
+          {{ rs_server_station_secrets.stations.bedc.authentication.ca_crt | indent( width=10, first=False) }}
+        client_crt: |
+          {{ rs_server_station_secrets.stations.bedc.authentication.client_crt | indent( width=10, first=False) }}
+        client_key: |
+          {{ rs_server_station_secrets.stations.bedc.authentication.client_key | indent( width=10, first=False) }}

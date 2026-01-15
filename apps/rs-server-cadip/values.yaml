@@ -35,7 +35,46 @@ app:
   # -- allow EODAG to handle it (set it to false for EODAG).
   useTokenModule: false
   station:
-    {{ rs_server_cadip_station | indent( width=4, first=False) }}
+    ssc:
+      endpoint:
+        url:
+          token: {{ rs_server_station_secrets.stations.ssc.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.ssc.service.url }}
+    ins:
+      endpoint:
+        url:
+          token: {{ rs_server_station_secrets.stations.ins.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.ins.service.url }}
+    mps:
+      endpoint:
+        url:
+          token: {{ rs_server_station_secrets.stations.mps.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.mps.service.url }}
+    mti:
+      endpoint:
+        url:
+          token: {{ rs_server_station_secrets.stations.mti.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.mti.service.url }}
+    nsg:
+      endpoint:
+        url:
+          token: {{ rs_server_station_secrets.stations.nsg.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.nsg.service.url }}
+    sgs:
+      endpoint:
+        url:
+          token: {{ rs_server_station_secrets.stations.sgs.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.sgs.service.url }}
+    kse:
+      endpoint:
+        url:
+          token: {{ rs_server_station_secrets.stations.kse.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.kse.service.url }}
+    par:
+      endpoint:
+        url:
+          token: {{ rs_server_station_secrets.stations.par.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.par.service.url }}
 
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
