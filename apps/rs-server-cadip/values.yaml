@@ -35,16 +35,6 @@ app:
   # -- allow EODAG to handle it (set it to false for EODAG).
   useTokenModule: false
   station:
-    ssc:
-      endpoint:
-        url:
-          token: {{ rs_server_station_secrets.stations.ssc.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.ssc.service.url }}
-    ins:
-      endpoint:
-        url:
-          token: {{ rs_server_station_secrets.stations.ins.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.ins.service.url }}
     mps:
       endpoint:
         url:
@@ -65,16 +55,11 @@ app:
         url:
           token: {{ rs_server_station_secrets.stations.sgs.authentication.token_url }}
           odata: {{ rs_server_station_secrets.stations.sgs.service.url }}
-    kse:
+    ssc:
       endpoint:
         url:
-          token: {{ rs_server_station_secrets.stations.kse.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.kse.service.url }}
-    par:
-      endpoint:
-        url:
-          token: {{ rs_server_station_secrets.stations.par.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.par.service.url }}
+          token: {{ rs_server_station_secrets.stations.ssc.authentication.token_url }}
+          odata: {{ rs_server_station_secrets.stations.ssc.service.url }}
 
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
