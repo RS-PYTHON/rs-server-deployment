@@ -45,9 +45,6 @@ app:
     s1c:
       endpoint:
         url: {{ rs_server_station_secrets.stations.s1c.service.url }}
-    #s2a:
-    #  endpoint:
-    #    url: {{ rs_server_station_secrets.stations.s2a.service.url }}
     s2b:
       endpoint:
         url: {{ rs_server_station_secrets.stations.s2b.service.url }}
