@@ -31,7 +31,7 @@ spec:
         command:
         - /bin/sh
         - -c
-        image: python:3.13.9-slim
+        image: python:3.13.11-slim
         name: dask-launcher
         volumeMounts:
         - mountPath: /scripts
