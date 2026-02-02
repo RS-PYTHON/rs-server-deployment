@@ -35,7 +35,32 @@ app:
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
   station:
-    {{ rs_server_edrs_stations | indent( width=4, first=False) }}
+    pedc:
+      service:
+        name: {{ rs_server_station_secrets.stations.pedc.service.name }}
+        url: {{ rs_server_station_secrets.stations.pedc.service.url }}
+        port: {{ rs_server_station_secrets.stations.pedc.service.port }}
+      domain: {{ rs_server_station_secrets.stations.pedc.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.pedc.authentication.auth_type }}
+        username: {{ rs_server_station_secrets.stations.pedc.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.pedc.authentication.password }}
+        ca_crt: /certs/ca.crt
+        client_crt: /certs/tls.crt
+        client_key: /certs/tls.key
+    bedc:
+      service:
+        name: {{ rs_server_station_secrets.stations.bedc.service.name }}
+        url: {{ rs_server_station_secrets.stations.bedc.service.url }}
+        port: {{ rs_server_station_secrets.stations.bedc.service.port }}
+      domain: {{ rs_server_station_secrets.stations.bedc.domain }}
+      authentication:
+        auth_type: {{ rs_server_station_secrets.stations.bedc.authentication.auth_type }}
+        username: {{ rs_server_station_secrets.stations.bedc.authentication.username }}
+        password: {{ rs_server_station_secrets.stations.bedc.authentication.password }}
+        ca_crt: /certs/ca.crt
+        client_crt: /certs/tls.crt
+        client_key: /certs/tls.key
 
 auth:
   secret:
