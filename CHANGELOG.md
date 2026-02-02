@@ -13,6 +13,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a6] - 2026-02-02
+
+### Changed
+
+- [PR#41](https://github.com/RS-PYTHON/rs-server-deployment/pull/41) : Replace minio by seaweedfs
+- [PR#43](https://github.com/RS-PYTHON/rs-server-deployment/pull/43) : Update to Python 3.13.11/Jupyter 5.4.3/Prefect 3.6.12
+- [PR#42](https://github.com/RS-PYTHON/rs-server-deployment/pull/42) : Moved station configuration from rs-infra-core to rs-server
+- Bump helm chart version
+
 ## [1.0a5] - 2025-12-23
 
 ### Added
