@@ -1,0 +1,132 @@
+# Copyright 2025 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-pgstac-db
+spec:
+  ttlSecondsAfterFinished: 360
+  template:
+    spec:
+      {{- if and .Values.cnpgstac.custom.enabled .Values.cnpgstac.custom.extensions }}
+      {{- with .Values.cnpgstac.custom.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      containers:
+        - name: create-pgstac-db
+          image: ghcr.io/stac-utils/pgstac-pypgstac:v0.9.8
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -xe
+              pypgstac pgready --debug &&
+              pypgstac migrate &&
+              psql << EOF
+              GRANT pgstac_read TO {{ .Values.cnpgstac.bootstrap.initdb.database }};
+              GRANT pgstac_ingest TO {{ .Values.cnpgstac.bootstrap.initdb.database }};
+              GRANT pgstac_admin TO {{ .Values.cnpgstac.bootstrap.initdb.database }};
+              ALTER ROLE {{ coalesce .Values.cnpgstac.bootstrap.initdb.owner .Values.cnpgstac.bootstrap.initdb.database }} IN DATABASE {{ .Values.cnpgstac.bootstrap.initdb.database }} SET search_path TO pgstac, public;
+              ALTER DATABASE {{ .Values.cnpgstac.bootstrap.initdb.database }} set search_path to pgstac, public;
+              {{- if .Values.cnpgstac.custom.enableReadOnly }}
+              \c catalog ;
+              UPDATE pgstac_settings SET value = true WHERE name = 'readonly';
+              {{- end }}
+              EOF
+              {{- if .Values.cnpgstac.custom.enabled }}
+              /scripts/pgstac_extensions_queryables.sh ;
+              {{- end }}
+          env:
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: password
+            - name: PGDATABASE
+              value: catalog
+            - name: PGPORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: port
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: host
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: username
+            - name: POSTGRES_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: password
+            - name: POSTGRES_HOST_READER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: host
+            - name: POSTGRES_HOST_WRITER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: host
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  key: port
+            - name: POSTGRES_DBNAME
+              value: catalog
+          {{- if .Values.cnpgstac.custom.enabled }}
+          {{- if or .Values.cnpgstac.custom.extensions .Values.cnpgstac.custom.queryables }}
+          volumeMounts:
+            {{- if .Values.cnpgstac.custom.extensions }}
+            - name: pgstac-json-schema
+              mountPath: /opt/pgstac_json_schema/
+            {{- end }}
+            - name: patch-post-action
+              mountPath: /scripts/pgstac_extensions_queryables.sh
+              subPath: pgstac_extensions_queryables.sh
+          {{- end }}
+          {{- end }}
+      {{- if .Values.cnpgstac.custom.enabled }}
+      {{- if or .Values.cnpgstac.custom.extensions .Values.cnpgstac.custom.queryables }}
+      volumes:
+        {{- if .Values.cnpgstac.custom.extensions }}
+        - name: download-json-schema
+          configMap:
+            name: {{ .Release.Name }}-download-json-schema
+            defaultMode: 0744
+        {{- end }}
+        - name: patch-post-action
+          configMap:
+            name: {{ .Release.Name }}-patch-post-action
+            defaultMode: 0744
+        - name: pgstac-json-schema
+          emptyDir: {}
+      {{- end }}
+      {{- end }}
+      restartPolicy: Never
