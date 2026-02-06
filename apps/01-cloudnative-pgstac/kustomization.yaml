@@ -15,8 +15,13 @@
 namespace: database
 
 resources:
-- cluster.yaml
 - https://raw.githubusercontent.com/cloudnative-pg/postgis-containers/refs/heads/main/image-catalogs/postgis-standard-trixie.yaml
+- cluster.yaml
+- configmap-extensions.yaml
+- job-init-pgstac.yaml
+- objectstore.yaml
+- scheduled-backup.yaml
+- servicemonitor.yaml
 
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
