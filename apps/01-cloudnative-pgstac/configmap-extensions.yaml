@@ -24,30 +24,29 @@ data:
     SET value='on' where name='context';
     EOSQL
 
-    {{ range .Values.cnpgstac.custom.extensions }}
+    {% for url in catalog.database.extensions %}
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     INSERT INTO stac_extensions (url)
     VALUES
-      ({{ . | squote }})
+      ('{{ url }}')
     ON CONFLICT DO NOTHING;
 
     UPDATE pgstac.stac_extensions
-    SET content=\$EscapeQuote\$$(cat /opt/pgstac_json_schema/{{ join "_" (slice ( . | splitList "/" ) 3 ) }})\$EscapeQuote\$
-    WHERE url={{ . | squote }} ;
+    SET content=\$EscapeQuote\$$(cat /opt/pgstac_json_schema/{{ url.split('/')[3:] | join('_') }})\$EscapeQuote\$
+    WHERE url='{{ url }}' ;
     EOSQL
-    {{ end }}
+    {% endfor %}
 
-    {{ range .Values.cnpgstac.custom.queryables }}
+    {% for queryable in catalog.database.queryables %}
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     INSERT INTO queryables (name)
     VALUES
-      ({{ . | squote }})
+      ('{{ queryable }}')
     ON CONFLICT DO NOTHING;
     EOSQL
-    {{ end }}
-
+    {% endfor %}
 
 ---
 
