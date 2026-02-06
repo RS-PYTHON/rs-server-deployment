@@ -20,9 +20,22 @@ metadata:
     app.kubernetes.io/instance: '{{ app_name }}'
     wait-for-deployment: Ready
 spec:
-  instances: {{ rs_server_catalog.database.instances }}
+  instances: {{ rs_server_catalog.database.cluster.instances }}
 
   enableSuperuserAccess: true
+
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgis-standard-trixie
+    major: 18
+
+  bootstrap:
+    initdb:
+      database: {{ rs_server_catalog.database.name }}
+      owner: {{ rs_server_catalog.database.username }}
+      secret:
+        name: "{{ rs_server_catalog.database.name }}-database-password"
 
   plugins:
   - name: barman-cloud.cloudnative-pg.io
@@ -32,7 +45,10 @@ spec:
 
   postgresql:
     parameters:
+      # shared_buffers: should be 1/4 of the total RAM
       shared_buffers: "256MB"
+      # effective_cache_size: should be 3/4 of the total RAM
+      effective_cache_size: "768MB"
 
   resources:
     requests:
@@ -43,8 +59,13 @@ spec:
       cpu: 300m
 
   storage:
-    storageClass: csi-cinder-high-speed-retain
-    size: 8Gi
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 8Gi
+      volumeMode: Filesystem
 
   affinity:
     #enablePodAntiAffinity: true
@@ -60,5 +81,3 @@ spec:
     - effect: NoSchedule
       key: role
       value: rs_server
-  monitoring:
-    enablePodMonitor: true

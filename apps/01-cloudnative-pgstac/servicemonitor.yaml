@@ -1,4 +1,4 @@
-# Copyright 2024 CS Group
+# Copyright 2026 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-namespace: processing
-app:
-  stations:
-    {% for station,details in rs_server_station_secrets.stations|items %}
-    {{- station }} :
-      {{ details|to_nice_yaml(indent=2)|indent(width=6, first=False) }}
-    {% endfor %}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: pgstac-cluster
+    app.kubernetes.io/name: cloudnative-pg
+    app.kubernetes.io/version: 1.28.1
+  name: pgstac-cluster
+spec:
+  endpoints:
+  - interval: 30s
+    port: metrics
+    scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+    - database
+  selector:
+    matchLabels:
+      cnpg.io/cluster: pgstac-cluster

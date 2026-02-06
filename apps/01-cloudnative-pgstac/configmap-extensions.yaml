@@ -1,4 +1,4 @@
-# Copyright 2025 CS Group
+# Copyright 2026 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,17 +18,14 @@ metadata:
   name: pgstac-patch-post-action
 data:
   pgstac_extensions_queryables.sh: |-
-    psql -X -q -v ON_ERROR_STOP=1 {{ .Values.cnpgstac.bootstrap.initdb.database }} <<EOSQL
+    psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     UPDATE pgstac.pgstac_settings
     SET value='on' where name='context';
     EOSQL
 
-    {{- if .Values.cnpgstac.custom }}
-    {{- if .Values.cnpgstac.custom.extensions }}
-
     {{ range .Values.cnpgstac.custom.extensions }}
-    psql -X -q -v ON_ERROR_STOP=1 {{ $.Values.cnpgstac.bootstrap.initdb.database }} <<EOSQL
+    psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     INSERT INTO stac_extensions (url)
     VALUES
@@ -41,11 +38,8 @@ data:
     EOSQL
     {{ end }}
 
-    {{- end }}
-
-    {{- if .Values.cnpgstac.custom.queryables }}
     {{ range .Values.cnpgstac.custom.queryables }}
-    psql -X -q -v ON_ERROR_STOP=1 {{ $.Values.cnpgstac.bootstrap.initdb.database }} <<EOSQL
+    psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     INSERT INTO queryables (name)
     VALUES
@@ -53,9 +47,7 @@ data:
     ON CONFLICT DO NOTHING;
     EOSQL
     {{ end }}
-    {{- end }}
 
-    {{- end }}
 
 ---
 
@@ -63,23 +55,13 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: pgstac-download-json-schema
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: cnpgstac
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
-  {{- end }}
 data:
   download.sh: |-
     #!/bin/sh
-    {{- range .Values.cnpgstac.custom.extensions }}
 
-    url={{ . }} ;
+    {% for url in catalog.database.extensions %}
+    url={{ url }} ;
     filename=$(echo ${url} | awk -F'/' '{print $4, $5, $6}' OFS="_") ;
     echo "Downloading ${url} ..." ;
     curl -s --create-dirs --output-dir /opt/pgstac_json_schema/ -o ${filename} ${url} ;
-
-    {{- end }}
+    {% endfor %}

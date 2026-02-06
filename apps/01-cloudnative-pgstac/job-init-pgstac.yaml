@@ -1,4 +1,4 @@
-# Copyright 2025 CS Group
+# Copyright 2026 CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,12 +20,15 @@ spec:
   ttlSecondsAfterFinished: 360
   template:
     spec:
-      {{- if and .Values.cnpgstac.custom.enabled .Values.cnpgstac.custom.extensions }}
-      {{- with .Values.cnpgstac.custom.initContainers }}
       initContainers:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- end }}
+        - name: download-pgstac-extensions
+          image: alpine/curl
+          command: [ "/scripts/init/download.sh" ]
+          volumeMounts:
+            - name: download-json-schema
+              mountPath: /scripts/init/
+            - name: pgstac-json-schema
+              mountPath: /opt/pgstac_json_schema/
       containers:
         - name: create-pgstac-db
           image: ghcr.io/stac-utils/pgstac-pypgstac:v0.9.8
@@ -37,96 +40,78 @@ spec:
               pypgstac pgready --debug &&
               pypgstac migrate &&
               psql << EOF
-              GRANT pgstac_read TO {{ .Values.cnpgstac.bootstrap.initdb.database }};
-              GRANT pgstac_ingest TO {{ .Values.cnpgstac.bootstrap.initdb.database }};
-              GRANT pgstac_admin TO {{ .Values.cnpgstac.bootstrap.initdb.database }};
-              ALTER ROLE {{ coalesce .Values.cnpgstac.bootstrap.initdb.owner .Values.cnpgstac.bootstrap.initdb.database }} IN DATABASE {{ .Values.cnpgstac.bootstrap.initdb.database }} SET search_path TO pgstac, public;
-              ALTER DATABASE {{ .Values.cnpgstac.bootstrap.initdb.database }} set search_path to pgstac, public;
-              {{- if .Values.cnpgstac.custom.enableReadOnly }}
-              \c catalog ;
-              UPDATE pgstac_settings SET value = true WHERE name = 'readonly';
-              {{- end }}
+              GRANT pgstac_read TO {{ rs_server_catalog.database.name }};
+              GRANT pgstac_ingest TO {{ rs_server_catalog.database.name }};
+              GRANT pgstac_admin TO {{ rs_server_catalog.database.name }};
+              ALTER ROLE {{ rs_server_catalog.database.username }} IN DATABASE {{ rs_server_catalog.database.name }} SET search_path TO pgstac, public;
+              ALTER DATABASE {{ rs_server_catalog.database.name }} set search_path to pgstac, public;
               EOF
-              {{- if .Values.cnpgstac.custom.enabled }}
               /scripts/pgstac_extensions_queryables.sh ;
-              {{- end }}
           env:
             - name: PGUSER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: username
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: password
             - name: PGDATABASE
               value: catalog
             - name: PGPORT
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: port
             - name: PGHOST
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: host
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: username
             - name: POSTGRES_PASS
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: password
             - name: POSTGRES_HOST_READER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: host
             - name: POSTGRES_HOST_WRITER
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: host
             - name: POSTGRES_PORT
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.cnpgstac.clusterName }}-superuser
+                  name: pgstac-cluster-superuser
                   key: port
             - name: POSTGRES_DBNAME
               value: catalog
-          {{- if .Values.cnpgstac.custom.enabled }}
-          {{- if or .Values.cnpgstac.custom.extensions .Values.cnpgstac.custom.queryables }}
           volumeMounts:
-            {{- if .Values.cnpgstac.custom.extensions }}
             - name: pgstac-json-schema
               mountPath: /opt/pgstac_json_schema/
-            {{- end }}
             - name: patch-post-action
               mountPath: /scripts/pgstac_extensions_queryables.sh
               subPath: pgstac_extensions_queryables.sh
-          {{- end }}
-          {{- end }}
-      {{- if .Values.cnpgstac.custom.enabled }}
-      {{- if or .Values.cnpgstac.custom.extensions .Values.cnpgstac.custom.queryables }}
       volumes:
-        {{- if .Values.cnpgstac.custom.extensions }}
         - name: download-json-schema
           configMap:
-            name: {{ .Release.Name }}-download-json-schema
+            name: pgstac-download-json-schema
             defaultMode: 0744
-        {{- end }}
         - name: patch-post-action
           configMap:
-            name: {{ .Release.Name }}-patch-post-action
+            name: pgstac-patch-post-action
             defaultMode: 0744
         - name: pgstac-json-schema
           emptyDir: {}
-      {{- end }}
-      {{- end }}
       restartPolicy: Never
