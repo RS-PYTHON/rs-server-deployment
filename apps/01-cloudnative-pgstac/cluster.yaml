@@ -37,11 +37,11 @@ spec:
       secret:
         name: "{{ rs_server_catalog.database.name }}-database-password"
 
-  # plugins:
-  # - name: barman-cloud.cloudnative-pg.io
-  #   isWALArchiver: true
-  #   parameters:
-  #     barmanObjectName: pgstac
+  plugins:
+  - name: barman-cloud.cloudnative-pg.io
+    isWALArchiver: true
+    parameters:
+      barmanObjectName: pgstac
 
   postgresql:
     parameters:
@@ -77,7 +77,7 @@ spec:
           - matchExpressions:
             - key: "node-role.kubernetes.io/rs_server"
               operator: Exists
-  tolerations:
-    - effect: NoSchedule
-      key: role
-      value: rs_server
+    tolerations:
+      - effect: NoSchedule
+        key: role
+        value: rs_server
