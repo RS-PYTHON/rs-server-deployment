@@ -37,11 +37,11 @@ spec:
       secret:
         name: "{{ rs_server_catalog.database.name }}-database-password"
 
-  plugins:
-  - name: barman-cloud.cloudnative-pg.io
-    isWALArchiver: true
-    parameters:
-      barmanObjectName: pgstac
+  # plugins:
+  # - name: barman-cloud.cloudnative-pg.io
+  #   isWALArchiver: true
+  #   parameters:
+  #     barmanObjectName: pgstac
 
   postgresql:
     parameters:
