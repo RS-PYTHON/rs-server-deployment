@@ -24,7 +24,7 @@ data:
     SET value='on' where name='context';
     EOSQL
 
-    {% for url in catalog.database.extensions %}
+    {% for url in rs_server_catalog.extensions %}
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     INSERT INTO stac_extensions (url)
@@ -38,7 +38,7 @@ data:
     EOSQL
     {% endfor %}
 
-    {% for queryable in catalog.database.queryables %}
+    {% for queryable in rs_server_catalog.queryables %}
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     INSERT INTO queryables (name)
@@ -58,7 +58,7 @@ data:
   download.sh: |-
     #!/bin/sh
 
-    {% for url in catalog.database.extensions %}
+    {% for url in rs_server_catalog.extensions %}
     url={{ url }} ;
     filename=$(echo ${url} | awk -F'/' '{print $4, $5, $6}' OFS="_") ;
     echo "Downloading ${url} ..." ;
