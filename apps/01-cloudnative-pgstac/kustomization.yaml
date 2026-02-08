@@ -15,7 +15,6 @@
 namespace: database
 
 resources:
-- https://raw.githubusercontent.com/cloudnative-pg/postgis-containers/refs/heads/main/image-catalogs/postgis-standard-trixie.yaml
 - cluster.yaml
 - configmap-extensions.yaml
 - job-init-pgstac.yaml
