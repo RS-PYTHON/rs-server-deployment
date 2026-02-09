@@ -58,17 +58,17 @@ jobs:
         with:
           repository: RS-PYTHON/rs-infra-core
           ref: ${{ steps.check_branch.outputs.branch_to_use }}
-      # - name: Checkout infra-monitoring repository
-      #   uses: actions/checkout@v6
-      #   if: ${{ matrix.deploy_monitoring }}
-      #   with:
-      #     path: rs-infra-monitoring
-      #     repository: RS-PYTHON/rs-infra-monitoring
-      # - name: Checkout workflow-env repository
-      #   uses: actions/checkout@v6
-      #   with:
-      #     path: rs-workflow-env
-      #     repository: RS-PYTHON/rs-workflow-env
+      - name: Checkout infra-monitoring repository
+        uses: actions/checkout@v6
+        if: ${{ matrix.deploy_monitoring }}
+        with:
+          path: rs-infra-monitoring
+          repository: RS-PYTHON/rs-infra-monitoring
+      - name: Checkout workflow-env repository
+        uses: actions/checkout@v6
+        with:
+          path: rs-workflow-env
+          repository: RS-PYTHON/rs-workflow-env
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
@@ -120,24 +120,24 @@ jobs:
           fi
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
-      # - name: Deploy the monitoring apps (for real)
-      #   if: ${{ matrix.deploy_monitoring }}
-      #   run: |
-      #     ./rs-infra-monitoring/.github/common/resources/configure-minikube-deployment.sh
-      #     conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-infra-monitoring/apps/"]}'
-      #   shell: bash
-      # - name: Deploy the required workflow-env apps (for real)
-      #   run: |
-      #     # rs-server requires apikeymanager, dask
-      #     for app in apikeymanager-db apikeymanager dask-gateway ; do
-      #       echo Installing $app...
-      #       conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml  -e '{"package_paths": ["./rs-workflow-env/apps/"], "app": "'$app'"}'
-      #     done
-      #   shell: bash
-      # - name: Deploy the rs-server apps (check)
-      #   run: |
-      #     conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-server-deployment/apps/"]}' -e private_registry=true
-      #   shell: bash
+      - name: Deploy the monitoring apps (for real)
+        if: ${{ matrix.deploy_monitoring }}
+        run: |
+          ./rs-infra-monitoring/.github/common/resources/configure-minikube-deployment.sh
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-infra-monitoring/apps/"]}'
+        shell: bash
+      - name: Deploy the required workflow-env apps (for real)
+        run: |
+          # rs-server requires apikeymanager, dask
+          for app in apikeymanager-db apikeymanager dask-gateway ; do
+            echo Installing $app...
+            conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml  -e '{"package_paths": ["./rs-workflow-env/apps/"], "app": "'$app'"}'
+          done
+        shell: bash
+      - name: Deploy the rs-server apps (check)
+        run: |
+          conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-server-deployment/apps/"]}' -e private_registry=true
+        shell: bash
       - name: Deploy the rs-server apps (for real)
         run: |
           sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
