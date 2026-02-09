@@ -1,4 +1,4 @@
-# Copyright 2024 CS Group
+# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,10 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-namespace: processing
-app:
-  stations:
-    {% for station,details in rs_server_station_secrets.stations|items %}
-    {{- station }} :
-      {{ details|to_nice_yaml(indent=2)|indent(width=6, first=False) }}
-    {% endfor %}
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: backup-pgstac-cluster
+  labels:
+    wait-for-deployment: Ready
+spec:
+  immediate: true
+  schedule: "0 0 11 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: pgstac-cluster
+  method: plugin
+  pluginConfiguration:
+    name: barman-cloud.cloudnative-pg.io

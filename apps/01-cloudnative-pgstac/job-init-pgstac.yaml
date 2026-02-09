@@ -1,0 +1,117 @@
+# Copyright 2026 CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-pgstac-db
+spec:
+  ttlSecondsAfterFinished: 360
+  template:
+    spec:
+      initContainers:
+        - name: download-pgstac-extensions
+          image: alpine/curl
+          command: [ "/scripts/init/download.sh" ]
+          volumeMounts:
+            - name: download-json-schema
+              mountPath: /scripts/init/
+            - name: pgstac-json-schema
+              mountPath: /opt/pgstac_json_schema/
+      containers:
+        - name: create-pgstac-db
+          image: ghcr.io/stac-utils/pgstac-pypgstac:v0.9.8
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -xe
+              pypgstac pgready --debug &&
+              pypgstac migrate &&
+              psql << EOF
+              GRANT pgstac_read TO {{ rs_server_catalog.database.name }};
+              GRANT pgstac_ingest TO {{ rs_server_catalog.database.name }};
+              GRANT pgstac_admin TO {{ rs_server_catalog.database.name }};
+              ALTER ROLE {{ rs_server_catalog.database.username }} IN DATABASE {{ rs_server_catalog.database.name }} SET search_path TO pgstac, public;
+              ALTER DATABASE {{ rs_server_catalog.database.name }} set search_path to pgstac, public;
+              EOF
+              /scripts/pgstac_extensions_queryables.sh ;
+          env:
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: username
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: password
+            - name: PGDATABASE
+              value: catalog
+            - name: PGPORT
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: port
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: host
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: username
+            - name: POSTGRES_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: password
+            - name: POSTGRES_HOST_READER
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: host
+            - name: POSTGRES_HOST_WRITER
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: host
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: pgstac-cluster-superuser
+                  key: port
+            - name: POSTGRES_DBNAME
+              value: catalog
+          volumeMounts:
+            - name: pgstac-json-schema
+              mountPath: /opt/pgstac_json_schema/
+            - name: patch-post-action
+              mountPath: /scripts/pgstac_extensions_queryables.sh
+              subPath: pgstac_extensions_queryables.sh
+      volumes:
+        - name: download-json-schema
+          configMap:
+            name: pgstac-download-json-schema
+            defaultMode: 0744
+        - name: patch-post-action
+          configMap:
+            name: pgstac-patch-post-action
+            defaultMode: 0744
+        - name: pgstac-json-schema
+          emptyDir: {}
+      restartPolicy: Never

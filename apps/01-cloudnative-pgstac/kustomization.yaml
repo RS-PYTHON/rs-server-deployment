@@ -1,4 +1,4 @@
-# Copyright 2025 CS Group
+# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,18 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: postgresql.cnpg.io/v1
-kind: ScheduledBackup
-metadata:
-  name: backup-cnpgstac-cluster
-  labels:
-    wait-for-deployment: Ready
-spec:
-  immediate: true
-  schedule: "0 0 11 * * *"
-  backupOwnerReference: self
-  cluster:
-    name: cnpgstac
-  method: plugin
-  pluginConfiguration:
-    name: barman-cloud.cloudnative-pg.io
+namespace: database
+
+resources:
+- cluster.yaml
+- configmap-extensions.yaml
+- job-init-pgstac.yaml
+- objectstore.yaml
+- scheduled-backup.yaml
+- servicemonitor.yaml
+- secret.yaml
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/instance: '{{ app_name }}'

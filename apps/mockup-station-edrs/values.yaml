@@ -17,9 +17,9 @@ namespace: processing
 
 app:
   FTPES:
-    enabled: true
+    enabled: false
   S3FS:
-    enabled: true
+    enabled: false
   port: 21
   username: test
   password: test
