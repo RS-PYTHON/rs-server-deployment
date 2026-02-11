@@ -48,6 +48,48 @@ data:
     EOSQL
     {% endfor %}
 
+    # https://pforge-exchange2.astrium.eads.net/jira/browse/RSPY-906 , https://github.com/RS-PYTHON/rs-demo/pull/239
+    psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
+    SET search_path TO pgstac, public;
+    CREATE OR REPLACE FUNCTION pgstac.external_ids_tokens(ext jsonb) RETURNS jsonb AS $$
+        SELECT CASE
+            WHEN ext IS NULL OR jsonb_typeof(ext) <> 'array' THEN '[]'::jsonb
+            ELSE COALESCE(
+                (
+                    SELECT jsonb_agg(DISTINCT token)
+                    FROM (
+                        SELECT CASE
+                            WHEN scheme IS NOT NULL AND scheme <> '' AND value IS NOT NULL AND value <> ''
+                            THEN scheme || ':' || value
+                        END AS token
+                        FROM jsonb_to_recordset(ext) AS x(scheme text, value text)
+                        UNION ALL
+                        SELECT value
+                        FROM jsonb_to_recordset(ext) AS x(scheme text, value text)
+                        WHERE value IS NOT NULL AND value <> ''
+                        UNION ALL
+                        SELECT scheme
+                        FROM jsonb_to_recordset(ext) AS x(scheme text, value text)
+                        WHERE scheme IS NOT NULL AND scheme <> ''
+                    ) tokens
+                    WHERE token IS NOT NULL AND token <> ''
+                ),
+                '[]'::jsonb
+            )
+        END;
+    $$ LANGUAGE SQL IMMUTABLE;
+    EOSQL
+    psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
+    SET search_path TO pgstac, public;
+    INSERT INTO queryables (name, definition, property_path)
+    VALUES (
+        'externalIds',
+        '{"title": "externalIds", "description": "externalIds", "type": "string"}',
+        'pgstac.external_ids_tokens(content->''properties''->''externalIds'')'
+    )
+    ON CONFLICT DO NOTHING;
+    EOSQL
+
 ---
 
 apiVersion: v1
