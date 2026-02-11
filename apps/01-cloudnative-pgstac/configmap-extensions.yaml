@@ -51,7 +51,7 @@ data:
     # https://pforge-exchange2.astrium.eads.net/jira/browse/RSPY-906 , https://github.com/RS-PYTHON/rs-demo/pull/239
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
-    CREATE OR REPLACE FUNCTION pgstac.external_ids_tokens(ext jsonb) RETURNS jsonb AS $$
+    CREATE OR REPLACE FUNCTION pgstac.external_ids_tokens(ext jsonb) RETURNS jsonb AS \$$
         SELECT CASE
             WHEN ext IS NULL OR jsonb_typeof(ext) <> 'array' THEN '[]'::jsonb
             ELSE COALESCE(
@@ -77,7 +77,7 @@ data:
                 '[]'::jsonb
             )
         END;
-    $$ LANGUAGE SQL IMMUTABLE;
+    \$$ LANGUAGE SQL IMMUTABLE;
     EOSQL
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
