@@ -117,3 +117,7 @@ ingress:
   path:
     - /storage
     - /osam/docs
+
+## WA for CI, to remove before next tag
+image:
+  version: latest
