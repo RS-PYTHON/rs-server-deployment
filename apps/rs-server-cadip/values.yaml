@@ -36,30 +36,20 @@ app:
   useTokenModule: false
   station:
     mps:
-      endpoint:
-        url:
-          token: {{ rs_server_station_secrets.stations.mps.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.mps.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.mps.service.url }}
+      configFile: mps_service_config.yaml
     mti:
-      endpoint:
-        url:
-          token: {{ rs_server_station_secrets.stations.mti.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.mti.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.mti.service.url }}
+      configFile: mti_service_config.yaml
     nsg:
-      endpoint:
-        url:
-          token: {{ rs_server_station_secrets.stations.nsg.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.nsg.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.nsg.service.url }}
+      configFile: nsg_service_config.yaml
     sgs:
-      endpoint:
-        url:
-          token: {{ rs_server_station_secrets.stations.sgs.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.sgs.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.sgs.service.url }}
+      configFile: sgs_service_config.yaml
     ssc:
-      endpoint:
-        url:
-          token: {{ rs_server_station_secrets.stations.ssc.authentication.token_url }}
-          odata: {{ rs_server_station_secrets.stations.ssc.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.ssc.service.url }}
+      configFile: ssc_service_config.yaml
 
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
