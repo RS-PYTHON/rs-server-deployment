@@ -40,23 +40,23 @@ app:
   useTokenModule: false
   station:
     s1a:
-      endpoint:
-        url: {{ rs_server_station_secrets.stations.s1a.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.s1a.service.url }}
+      configFile: s1a_service_config.yaml
     s1c:
-      endpoint:
-        url: {{ rs_server_station_secrets.stations.s1c.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.s1c.service.url }}
+      configFile: s1c_service_config.yaml
     s2b:
-      endpoint:
-        url: {{ rs_server_station_secrets.stations.s2b.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.s2b.service.url }}
+      configFile: s2b_service_config.yaml
     s2c:
-      endpoint:
-        url: {{ rs_server_station_secrets.stations.s2c.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.s2c.service.url }}
+      configFile: s2c_service_config.yaml
     s3a:
-      endpoint:
-        url: {{ rs_server_station_secrets.stations.s3a.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.s3a.service.url }}
+      configFile: s3a_service_config.yaml
     s3b:
-      endpoint:
-        url: {{ rs_server_station_secrets.stations.s3b.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.s3b.service.url }}
+      configFile: s3b_service_config.yaml
 
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
