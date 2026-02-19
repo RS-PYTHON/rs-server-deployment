@@ -24,7 +24,7 @@ app:
   catalogBucket: {{ rspy.catalog_bucket }}
   uacHomeUrl : https://apikeymanager.{{ platform_domain_name }}/docs
   # -- Osam pod address (used to retrieve bucket configurations)
-  endpointOsam: http://rs-osam.processing.svc.cluster.local:8080
+  endpointOsam: http://rs-server-osam.processing.svc.cluster.local:8080
   # -- Config directory for the application
   confDir: /app/conf
 

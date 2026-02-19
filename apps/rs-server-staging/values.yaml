@@ -35,7 +35,7 @@ app:
   # -- Prip server pod address
   endpointPrip: https://{{ platform_domain_name }}/prip
   # -- Osam pod address (used to retrieve bucket configurations)
-  endpointOsam: http://rs-osam.processing.svc.cluster.local:8080
+  endpointOsam: http://rs-server-osam.processing.svc.cluster.local:8080
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
   station:
