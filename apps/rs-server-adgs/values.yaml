@@ -41,8 +41,8 @@ app:
   useTokenModule: false
   station:
     adgs:
-      endpoint:
-        url: {{ rs_server_station_secrets.stations.adgs.service.url }}
+      endpoint: {{ rs_server_station_secrets.stations.adgs.service.url }}
+      configFile: adgs_service_config.yaml
 
   # -- URL of the API Key Manager service
   uacURL: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
