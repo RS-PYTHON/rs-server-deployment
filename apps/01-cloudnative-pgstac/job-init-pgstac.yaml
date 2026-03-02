@@ -46,7 +46,7 @@ spec:
               ALTER ROLE {{ rs_server_catalog.database.username }} IN DATABASE {{ rs_server_catalog.database.name }} SET search_path TO pgstac, public;
               ALTER DATABASE {{ rs_server_catalog.database.name }} set search_path to pgstac, public;
               EOF
-              /scripts/pgstac_extensions_queryables.sh ;
+              /bin/sh /scripts/pgstac_extensions_queryables.sh ;
           env:
             - name: PGUSER
               valueFrom:
