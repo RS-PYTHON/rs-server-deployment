@@ -1,4 +1,4 @@
-# Copyright 2025 CS Group
+# Copyright 2023-2026 Airbus, CS Group
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -113,4 +113,3 @@ expiration_bucket_csv: |
     copernicus,s03hkmraw,*,30,prip-rs-sentinel-3-s03hkmraw
     copernicus,s03hkm2l0,*,30,prip-rs-sentinel-3-s03hkm2l0
     copernicus,s03natl0_,*,30,prip-rs-sentinel-3-s03natl0x
-

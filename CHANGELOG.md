@@ -13,6 +13,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a7] - 2026-03-02
+
+### Added
+
+- [RSPY-915](https://github.com/RS-PYTHON/rs-server-deployment/pull/46) : cloudnative
+- [RSPY-906](https://github.com/RS-PYTHON/rs-server-deployment/pull/47) : stac search external ids
+- [RSPY-490](https://github.com/RS-PYTHON/rs-server-deployment/pull/49) : Allow to externalize CADIP/AUXIP collections configuration files
+
+### Changed
+
+- [PR#45](https://github.com/RS-PYTHON/rs-server-deployment/pull/45) : cration database for s3quotamonitoring
+- [PR#48](https://github.com/RS-PYTHON/rs-server-deployment/pull/48) : rs-server-osam
+- [RSPY-926](https://github.com/RS-PYTHON/rs-server-deployment/pull/50) : Update rs-server-osam endpoint
+- [PR#55](https://github.com/RS-PYTHON/rs-server-deployment/pull/55) : CI: allow to specify rs-infra-core ref to use
+- [PR#54](https://github.com/RS-PYTHON/rs-server-deployment/pull/54) : fix: Update pgstac image version and database permissions
+- update rs-server helm chart version
+
+### Removed
+
+- [PR#52](https://github.com/RS-PYTHON/rs-server-deployment/pull/52) : Remove useless OBS configuration, update copyright#52
+
 ## [1.0a6] - 2026-02-02
 
 ### Changed

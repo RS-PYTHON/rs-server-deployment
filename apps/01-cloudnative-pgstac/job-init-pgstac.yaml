@@ -23,7 +23,7 @@ spec:
       initContainers:
         - name: download-pgstac-extensions
           image: alpine/curl
-          command: [ "/scripts/init/download.sh" ]
+          command: ["/scripts/init/download.sh"]
           volumeMounts:
             - name: download-json-schema
               mountPath: /scripts/init/
@@ -31,7 +31,7 @@ spec:
               mountPath: /opt/pgstac_json_schema/
       containers:
         - name: create-pgstac-db
-          image: ghcr.io/stac-utils/pgstac-pypgstac:v0.9.8
+          image: ghcr.io/stac-utils/pgstac-pypgstac:v0.9.10
           command:
             - /bin/sh
             - -c
@@ -40,13 +40,13 @@ spec:
               pypgstac pgready --debug &&
               pypgstac migrate &&
               psql << EOF
-              GRANT pgstac_read TO {{ rs_server_catalog.database.name }};
-              GRANT pgstac_ingest TO {{ rs_server_catalog.database.name }};
-              GRANT pgstac_admin TO {{ rs_server_catalog.database.name }};
+              GRANT pgstac_read TO {{ rs_server_catalog.database.username }};
+              GRANT pgstac_ingest TO {{ rs_server_catalog.database.username }};
+              GRANT pgstac_admin TO {{ rs_server_catalog.database.username }};
               ALTER ROLE {{ rs_server_catalog.database.username }} IN DATABASE {{ rs_server_catalog.database.name }} SET search_path TO pgstac, public;
               ALTER DATABASE {{ rs_server_catalog.database.name }} set search_path to pgstac, public;
               EOF
-              /scripts/pgstac_extensions_queryables.sh ;
+              /bin/sh /scripts/pgstac_extensions_queryables.sh ;
           env:
             - name: PGUSER
               valueFrom:
