@@ -130,6 +130,7 @@ jobs:
         shell: bash
       - name: Deploy the required workflow-env apps (for real)
         run: |
+          ./rs-workflow-env/.github/common/resources/configure-minikube-deployment.sh
           # rs-server requires apikeymanager, dask
           for app in apikeymanager-db apikeymanager dask-gateway ; do
             echo Installing $app...
