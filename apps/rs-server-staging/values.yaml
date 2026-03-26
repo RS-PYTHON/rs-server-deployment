@@ -49,10 +49,6 @@ app:
       type: cadip
     s3rspy:
       type: s3
-    pedc:
-      type: edrs
-    bedc:
-      type: edrs
 
 dask:
   # -- Dask gateway address
