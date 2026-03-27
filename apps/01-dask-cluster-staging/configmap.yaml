@@ -113,10 +113,18 @@ data:
         return getattr(report, "name", None)
 
     def current_worker_count(client: DaskClient) -> int:
-        """Return current number of workers (len of workers map)."""
+        """Return the number of workers, fallback to scheduler n_workers if inconsistent."""
         try:
             info = client.scheduler_info() or {}
-            return len(info.get("workers", {}))
+            workers_dict = info.get("workers", {})
+            n_workers = info.get("n_workers", len(workers_dict))
+            # If scheduler_info drops a worker (bug), fallback to scheduler-declared count
+            if len(workers_dict) != n_workers:
+                print(f"[WARN] workers map={len(workers_dict)} but scheduler reports n_workers={n_workers}. Using scheduler value.")
+                return n_workers
+
+            return len(workers_dict)
+
         except Exception:
             return 0
 
