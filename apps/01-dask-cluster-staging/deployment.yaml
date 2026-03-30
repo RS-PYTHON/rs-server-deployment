@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - args:
-        - pip install dask==2026.1.2 dask-gateway==2025.4.0 && python /scripts/script.py
+        - pip install dask==2026.1.2 dask-gateway==2025.4.0 numpy==2.4.3 && python /scripts/script.py
         command:
         - /bin/sh
         - -c
