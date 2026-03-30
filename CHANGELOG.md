@@ -24,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 - [PR#57](https://github.com/RS-PYTHON/rs-server-deployment/pull/57) : Update to pgstac 0.10.0
 - [PR#58](https://github.com/RS-PYTHON/rs-server-deployment/pull/58) : Update to Python 3.13.12 / Prefect 3.6.20
+- Bump helm chart tag
 
 ### Fixed
 
