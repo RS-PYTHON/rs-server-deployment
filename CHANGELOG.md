@@ -13,6 +13,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a8] - 2026-03-30
+
+### Added
+
+- [RSPY-900](https://github.com/RS-PYTHON/rs-server-deployment/pull/51) : Decouple and update Dask versions part1
+- [RSPY-900](https://github.com/RS-PYTHON/rs-server-deployment/pull/61) : Decouple and update Dask versions part2
+
+### Changed
+
+- [PR#57](https://github.com/RS-PYTHON/rs-server-deployment/pull/57) : Update to pgstac 0.10.0
+- [PR#58](https://github.com/RS-PYTHON/rs-server-deployment/pull/58) : Update to Python 3.13.12 / Prefect 3.6.20
+
+### Fixed
+
+- [PR#64](https://github.com/RS-PYTHON/rs-server-deployment/pull/64) : fix: update worker count computation due to dask regression
+
+### Removed :carpentry_saw:
+
+- [PR#60](https://github.com/RS-PYTHON/rs-server-deployment/pull/60) : Chop chop obsolete cadip datasource
+- [RSPY-981](https://github.com/RS-PYTHON/rs-server-deployment/pull/63) : Remove EDRS
+
 ## [1.0a7] - 2026-03-02
 
 ### Added
@@ -23,7 +44,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
-- [PR#45](https://github.com/RS-PYTHON/rs-server-deployment/pull/45) : cration database for s3quotamonitoring
+- [PR#45](https://github.com/RS-PYTHON/rs-server-deployment/pull/45) : creation database for s3quotamonitoring
 - [PR#48](https://github.com/RS-PYTHON/rs-server-deployment/pull/48) : rs-server-osam
 - [RSPY-926](https://github.com/RS-PYTHON/rs-server-deployment/pull/50) : Update rs-server-osam endpoint
 - [PR#55](https://github.com/RS-PYTHON/rs-server-deployment/pull/55) : CI: allow to specify rs-infra-core ref to use
