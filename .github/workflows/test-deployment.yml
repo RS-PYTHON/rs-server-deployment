@@ -134,13 +134,22 @@ jobs:
       - name: Remove the monitoring (Work around)
         if: ${{ matrix.deploy_monitoring }}
         run: |
+          echo "Deleting namespaces monitoring and logging.."
           kubectl delete namespace monitoring logging
+
+          echo "Deleting prefect 3 grafanadatasource app.."
           rm -rf ./rs-workflow-env/apps/prefect3-grafanadatasource
+
+          echo "Removing grafanadatasource.yaml from apps.."
           yq -i 'del(.resources[] | select(. == "grafanadatasource.yaml"))' ./rs-server-deployment/apps/01-pi-db/kustomization.yaml
           yq -i 'del(.resources[] | select(. == "grafanadatasource.yaml"))' ./rs-server-deployment/apps/01-pygeoapi-db/kustomization.yaml
           yq -i 'del(.resources[] | select(. == "grafanadatasource.yaml"))' ./rs-server-deployment/apps/01-s3quotamonitoring-db/kustomization.yaml
+
+          echo "Removing servicemonitor.yaml from apps.."
           yq -i 'del(.resources[] | select(. == "servicemonitor.yaml"))' ./rs-workflow-env/apps/jupyterhub/kustomization.yaml
           yq -i 'del(.resources[] | select(. == "servicemonitor.yaml"))' ./rs-server-deployment/apps/01-cloudnative-pgstac/kustomization.yaml
+
+          echo "Removing initContainers and tempo.endpoint from apps.."
           yq -i '.initContainers = [] | .tempo.endpoint = null' ./rs-server-deployment/apps/rs-server-adgs/values.yaml
           yq -i '.initContainers = [] | .tempo.endpoint = null' ./rs-server-deployment/apps/02-rs-server-osam/values.yaml
           yq -i '.initContainers = [] | .tempo.endpoint = null' ./rs-server-deployment/apps/rs-server-cadip/values.yaml
