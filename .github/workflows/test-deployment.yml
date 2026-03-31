@@ -139,27 +139,39 @@ jobs:
           set -x
 
           echo "Deleting namespaces monitoring and logging.."
-          kubectl get namespace monitoring -o json
-          kubectl get namespace logging -o json
+          #kubectl get namespace monitoring -o json
+          #kubectl get namespace logging -o json
 
-          kubectl patch namespace monitoring -p '{"spec":{"finalizers":[]}}' --type=merge
-          kubectl patch namespace logging -p '{"spec":{"finalizers":[]}}' --type=merge
+          #kubectl patch namespace monitoring -p '{"spec":{"finalizers":[]}}' --type=merge
+          #kubectl patch namespace logging -p '{"spec":{"finalizers":[]}}' --type=merge
 
-          kubectl get namespace monitoring -o json
-          kubectl get namespace logging -o json
+          #kubectl get namespace monitoring -o json
+          #kubectl get namespace logging -o json
 
-          kubectl get ns monitoring -o json \
-            | jq 'del(.spec.finalizers)' \
-            | kubectl replace --raw "/api/v1/namespaces/monitoring/finalize" -f -
+          #kubectl get ns monitoring -o json \
+          #  | jq 'del(.spec.finalizers)' \
+          #  | kubectl replace --raw "/api/v1/namespaces/monitoring/finalize" -f -
 
-          kubectl get ns logging -o json \
-            | jq 'del(.spec.finalizers)' \
-            | kubectl replace --raw "/api/v1/namespaces/logging/finalize" -f -
+          #kubectl get ns logging -o json \
+          #  | jq 'del(.spec.finalizers)' \
+          #  | kubectl replace --raw "/api/v1/namespaces/logging/finalize" -f -
           
-          kubectl get namespace monitoring -o json
-          kubectl get namespace logging -o json
+          #kubectl get namespace monitoring -o json
+          #kubectl get namespace logging -o json
 
-          kubectl delete namespace monitoring logging --timeout=30s || true
+          #kubectl delete namespace monitoring logging --timeout=30s || true
+          minikube ssh
+          sudo apt-get update -y
+          sudo apt-get install -y etcd-client
+          cd /var/lib/minikube/certs/etcd
+          sudo ETCDCTL_API=3 etcdctl \
+            --cacert=ca.crt --cert=server.crt --key=server.key \
+            --endpoints https://127.0.0.1:2379 \
+            del /registry/namespaces/monitoring
+          sudo ETCDCTL_API=3 etcdctl \
+            --cacert=ca.crt --cert=server.crt --key=server.key \
+            --endpoints https://127.0.0.1:2379 \
+            del /registry/namespaces/logging
 
           echo "Deleting prefect 3 grafanadatasource app.."
           rm -rf ./rs-workflow-env/apps/prefect3-grafanadatasource
