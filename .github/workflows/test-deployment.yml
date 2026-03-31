@@ -160,18 +160,25 @@ jobs:
           #kubectl get namespace logging -o json
 
           #kubectl delete namespace monitoring logging --timeout=30s || true
-          minikube ssh
-          sudo apt-get update -y
-          sudo apt-get install -y etcd-client
-          cd /var/lib/minikube/certs/etcd
-          sudo ETCDCTL_API=3 etcdctl \
-            --cacert=ca.crt --cert=server.crt --key=server.key \
-            --endpoints https://127.0.0.1:2379 \
-            del /registry/namespaces/monitoring
-          sudo ETCDCTL_API=3 etcdctl \
-            --cacert=ca.crt --cert=server.crt --key=server.key \
-            --endpoints https://127.0.0.1:2379 \
-            del /registry/namespaces/logging
+
+          minikube ssh << 'EOF'
+            sudo apt-get update -y
+            sudo apt-get install -y etcd-client
+
+            cd /var/lib/minikube/certs/etcd
+
+            # Delete monitoring namespace
+            sudo ETCDCTL_API=3 etcdctl \
+              --cacert=ca.crt --cert=server.crt --key=server.key \
+              --endpoints https://127.0.0.1:2379 \
+              del /registry/namespaces/monitoring
+
+            # Delete logging namespace
+            sudo ETCDCTL_API=3 etcdctl \
+              --cacert=ca.crt --cert=server.crt --key=server.key \
+              --endpoints https://127.0.0.1:2379 \
+              del /registry/namespaces/logging
+          EOF
 
           echo "Deleting prefect 3 grafanadatasource app.."
           rm -rf ./rs-workflow-env/apps/prefect3-grafanadatasource
