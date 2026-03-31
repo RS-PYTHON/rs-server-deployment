@@ -159,7 +159,7 @@ jobs:
           kubectl get namespace monitoring -o json
           kubectl get namespace logging -o json
 
-          kubectl delete namespace monitoring logging
+          kubectl delete namespace monitoring logging --timeout=30s || true
 
           echo "Deleting prefect 3 grafanadatasource app.."
           rm -rf ./rs-workflow-env/apps/prefect3-grafanadatasource
