@@ -146,7 +146,7 @@ jobs:
       - name: Deploy the rs-server apps (for real)
         run: |
           sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
-          ./rs-server-deployment/.github/common/resources/configure-minikube-deployment.sh
+          DEPLOY_MONITORING=${{ matrix.deploy_monitoring }} ./rs-server-deployment/.github/common/resources/configure-minikube-deployment.sh
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-server-deployment/apps/"]}'
         shell: bash
       - name: 🩺 Kubernetes failure diagnostics
