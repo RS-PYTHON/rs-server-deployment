@@ -133,7 +133,7 @@ jobs:
         shell: bash
       - name: Remove the monitoring (Work around)
         if: ${{ matrix.deploy_monitoring }}
-        timeout-minutes: 2
+        timeout-minutes: 5
         continue-on-error: true
         run: |
           set -x
