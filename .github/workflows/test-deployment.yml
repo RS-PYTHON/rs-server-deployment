@@ -134,7 +134,11 @@ jobs:
       - name: Remove the monitoring (Work around)
         if: ${{ matrix.deploy_monitoring }}
         run: |
+          set -x
+
           echo "Deleting namespaces monitoring and logging.."
+          kubectl patch namespace monitoring -p '{"spec":{"finalizers":[]}}' --type=merge
+          kubectl patch namespace logging -p '{"spec":{"finalizers":[]}}' --type=merge
           kubectl delete namespace monitoring logging
 
           echo "Deleting prefect 3 grafanadatasource app.."
