@@ -154,7 +154,7 @@ jobs:
 
           kubectl get ns logging -o json \
             | jq 'del(.spec.finalizers)' \
-            | kubectl replace --raw "/api/v1/namespaces/logging/finalize"
+            | kubectl replace --raw "/api/v1/namespaces/logging/finalize" -f -
           
           kubectl get namespace monitoring -o json
           kubectl get namespace logging -o json
