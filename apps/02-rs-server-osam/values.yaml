@@ -38,6 +38,12 @@ app:
     useExternalBucketConfigMap: true
     # -- Name of the external configmap to use. Used only if useExternalBucketConfigMap is true
     externalBucketConfigMapName: "rs-catalog-staging-configmap"
+    # -- The default synchronization time in seconds of the keycloak users with the ovh users (default is twice per day)
+    defaultOsamFrequencySync: 43200
+    # -- Cache size (number of cached Keycloak usernames) for the /storage/account/credentials endpoint
+    osamCredentialsCacheSize: 1024
+    # -- Cache TTL (time to live) in seconds for the /storage/account/credentials endpoint (default is 2 hours)
+    osamCredentialsCacheTtl: 7200
   # -- Description template for ovh users when osam creates them
   obsDescriptionTemplate: "## linked to keycloak user %keycloak-user% from platform ops"
 
