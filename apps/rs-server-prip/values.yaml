@@ -30,14 +30,9 @@ app:
   # -- Station configuration file for the application
   stationConfigFile: stations_cfg.json
   pripSearchConfigFile: prip_search_config.yaml
-  # -- EODAG configuration file for the application. If useTokenModule is true the prip_ws_config_token_module.yaml
-  # -- shall be used. When useTokenModule is false, the prip_ws_config.yaml shall be used.
-  # -- Set properly the EODAG_PRIP_CONFIG env var.
+  # -- EODAG configuration file for the application. Set properly the EODAG_PRIP_CONFIG env var.
   eodagConfigFile: prip_ws_config.yaml
-  eodagConfigFileTokenModule: prip_ws_config_token_module.yaml
   ptypeMappingFile: product_type_mapping.yaml
-  # -- The way the token for the external stations is loaded: own module or let eodag to do it (set it to false)
-  useTokenModule: false
   station:
     s1a:
       endpoint: {{ rs_server_station_secrets.stations.s1a.service.url }}
