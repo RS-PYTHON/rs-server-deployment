@@ -42,9 +42,10 @@ data:
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     INSERT INTO queryables (name)
-    VALUES
-      ('{{ queryable }}')
-    ON CONFLICT DO NOTHING;
+    SELECT '{{ queryable }}'
+    WHERE NOT EXISTS (
+        SELECT 1 FROM queryables WHERE name = '{{ queryable }}'
+    );
     EOSQL
     {% endfor %}
 
