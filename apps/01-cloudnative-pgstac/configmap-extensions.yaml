@@ -82,7 +82,6 @@ data:
     EOSQL
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
-
     INSERT INTO queryables (name, definition, property_path)
     SELECT
         'externalIds',
