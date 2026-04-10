@@ -31,7 +31,7 @@ spec:
               mountPath: /opt/pgstac_json_schema/
       containers:
         - name: create-pgstac-db
-          image: ghcr.io/stac-utils/pgstac-pypgstac:v0.9.10
+          image: ghcr.io/stac-utils/pgstac-pypgstac:v0.9.11
           command:
             - /bin/sh
             - -c
