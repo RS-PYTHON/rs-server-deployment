@@ -27,6 +27,8 @@ app:
   endpointOsam: http://rs-server-osam.processing.svc.cluster.local:8080
   # -- Config directory for the application
   confDir: /app/conf
+  # -- Maximum number of workers for the catalog - publish task. Default: 6
+  publishCheckMaxWorkers: 6
 
 auth:
   secret:
