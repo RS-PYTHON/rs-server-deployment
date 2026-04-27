@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ### Changed
 
-- [PR#69](https://github.com/RS-PYTHON/rs-server-deployment/pull/69) : Update to pgstac 0.9.11 
+- [PR#69](https://github.com/RS-PYTHON/rs-server-deployment/pull/69) : Update to pgstac 0.9.11
 - Bumped rs-server and mockups version
 
 ### Fixed
