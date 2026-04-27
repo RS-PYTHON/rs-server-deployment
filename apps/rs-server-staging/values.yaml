@@ -38,6 +38,12 @@ app:
   endpointOsam: http://rs-server-osam.processing.svc.cluster.local:8080
   # -- Object Storage bucket for the catalog
   catalogBucket: {{ rspy.catalog_bucket }}
+  # -- Catalog publish timeout (in seconds)
+  catalogPublishTimeout: 120
+  # -- Catalog publish max retries
+  catalogPublishMaxRetries: 3
+  # -- Catalog publish retry delay (in seconds)
+  catalogPublishRetryDelay: 30
   station:
     adgs:
       type: auxip
