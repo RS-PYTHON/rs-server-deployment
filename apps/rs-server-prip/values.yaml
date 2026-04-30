@@ -40,6 +40,9 @@ app:
     s1c:
       endpoint: {{ rs_server_station_secrets.stations.s1c.service.url }}
       configFile: s1c_service_config.yaml
+    s1d:
+      endpoint: {{ rs_server_station_secrets.stations.s1d.service.url }}
+      configFile: s1d_service_config.yaml
     s2b:
       endpoint: {{ rs_server_station_secrets.stations.s2b.service.url }}
       configFile: s2b_service_config.yaml
