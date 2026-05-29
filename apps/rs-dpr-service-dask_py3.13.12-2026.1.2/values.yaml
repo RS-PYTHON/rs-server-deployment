@@ -143,7 +143,7 @@ image:
   # -- Image repository
   repository: rs-python
   # -- Image name
-  name: rs-dpr-service
+  name: rs-dpr-service_py3.13.12-2026.1.2
   version: latest
   # -- Image pull policy
   PullPolicy: IfNotPresent
@@ -161,14 +161,7 @@ ingress:
   host: {{ platform_domain_name }}
   # -- Ingress path for the application
   path:
-    - /dpr/processes
-    - /dpr/processes/mockup
-    - /dpr/processes/s1_l0
-    - /dpr/processes/s3_l0
-    - /dpr/processes/s3_olci
-    - /dpr/processes/s3_l1olci
-    - /dpr/processes/s3_l2olci
-    - /dpr/jobs
+    - /dpr/processes/s1_ard
 
 resources:
   request:

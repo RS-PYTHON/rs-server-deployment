@@ -161,8 +161,6 @@ ingress:
   host: {{ platform_domain_name }}
   # -- Ingress path for the application
   path:
-    - /dpr/processes/s1_ard
-    - /dpr/processes/cpm
     - /dpr/processes/conv_safe_zarr
 
 resources:
