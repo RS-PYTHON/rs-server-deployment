@@ -33,3 +33,11 @@ repos:
     -   id: helmlint
     -   id: tflint
     -   id: shellcheck
+
+-   repo: local
+    hooks:
+      - id: license-check
+        name: License Header Check
+        entry: bash -c 'docker run --rm -v $(pwd):/github/workspace apache/skywalking-eyes:latest header check'
+        language: system
+        pass_filenames: false
