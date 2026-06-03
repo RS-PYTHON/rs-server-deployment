@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a10] - 2026-06-02
+
+### Added
+
+- [RSPY-1046](https://github.com/RS-PYTHON/rs-server-deployment/pull/70) : Add Sentinel-1D#70
+- [RSPY-1044](https://github.com/RS-PYTHON/rs-server-deployment/pull/72) : Enable several rs-dpr-services#72
+
+### Fixed
+
+- [PR#62](https://github.com/RS-PYTHON/rs-server-deployment/pull/62) : Add missing rs-workflow-env minikube-deployment script
+
 ## [1.0a9] - 2026-04-27
 
 ### Added
