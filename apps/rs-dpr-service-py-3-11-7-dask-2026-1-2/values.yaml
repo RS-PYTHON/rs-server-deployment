@@ -144,7 +144,6 @@ image:
   repository: rs-python
   # -- Image name
   name: rs-dpr-service_py3.11.7-2026.1.2
-  version: latest
   # -- Image pull policy
   PullPolicy: IfNotPresent
   #imagePullSecrets: regcred
