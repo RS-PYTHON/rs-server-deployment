@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a11] - 2026-06-19
+
+### Added
+
+- [RSPY-725](https://github.com/RS-PYTHON/rs-server-deployment/pull/74) : Added sql for expires
+
+### Changed
+
+- [PR#75](https://github.com/RS-PYTHON/rs-server-deployment/pull/75) : update CI to delete specific app
+- Bumped rs-server and mockups version
+
 ## [1.0a10] - 2026-06-02
 
 ### Added
