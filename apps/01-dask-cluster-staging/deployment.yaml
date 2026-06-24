@@ -33,6 +33,11 @@ spec:
         - -c
         image: python:3.13.12-slim
         name: dask-launcher
+        resources:
+          limits:
+            memory: 256Mi
+          requests:
+            memory: 2Mi
         volumeMounts:
         - mountPath: /scripts
           name: script-volume
