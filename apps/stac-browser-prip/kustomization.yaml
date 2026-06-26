@@ -16,7 +16,7 @@ namespace: processing
 
 helmCharts:
 - name: stac-browser
-  version: 1.0.0-a11
+  version: 1.0.0-a11-086fe93
   releaseName: '{{ app_name }}'
   repo: https://rs-python.github.io/rs-helm
   valuesFile: values.yaml
