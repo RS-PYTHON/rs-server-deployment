@@ -161,6 +161,7 @@ ingress:
   # -- Ingress path for the application
   path:
     - /dpr/processes/conv_safe_zarr
+    - /dpr/processes/mockup
 
 resources:
   request:

@@ -161,7 +161,6 @@ ingress:
   # -- Ingress path for the application
   path:
     - /dpr/processes
-    - /dpr/processes/mockup
     - /dpr/processes/s1_l0
     - /dpr/processes/s3_l0
     - /dpr/processes/s3_olci
