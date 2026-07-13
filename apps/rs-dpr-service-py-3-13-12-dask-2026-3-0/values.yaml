@@ -143,7 +143,7 @@ image:
   # -- Image repository
   repository: rs-python
   # -- Image name
-  name: rs-dpr-service_py3.13.12-2026.3.0
+  name: rs-dpr-service_py3.13.12-2026.7.0
   # -- Image pull policy
   PullPolicy: IfNotPresent
   #imagePullSecrets: regcred
