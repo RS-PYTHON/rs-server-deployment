@@ -34,6 +34,17 @@ app:
   # -- URL of the API Key Manager home page (public)
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
 
+processors:
+  # -- List of DPR processors exposed/enabled by rs-dpr-service.
+  enabled:
+    - s1_l0
+    - s3_l0
+    - s3_olci
+    - s3_l1olci
+    - s3_l2olci
+    - s1_ard
+    - conv_safe_zarr
+
 dask:
   # -- Dask gateway address
   gateway_address: http://traefik-dask-gateway.dask-gateway.svc.cluster.local
