@@ -29,6 +29,8 @@ app:
   confDir: /app/conf
   # -- Maximum number of workers for the catalog - publish task. Default: 6
   publishCheckMaxWorkers: 6
+  # -- Retry the complete S3 cleanup once before catalog metadata deletion
+  catalogDeleteMaxRetries: 1
 
 auth:
   secret:
