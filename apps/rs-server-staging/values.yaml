@@ -62,9 +62,7 @@ dask:
   # -- Dask gateway auth type
   gateway_auth_type: jupyterhub
   # -- Jupyter API Token when dask.jupyterhub=jupyterhub
-  # This token must be generated from https://processing.{{ platform_domain_name }}/jupyter/hub/token
-  # See Prerequisite in the [Dask Gateway how-to](/docs/how-to/dask-gateway.md).
-  jupyterhub_api_token: {{ rs_server_staging.jupyterhub_token }}
+  jupyterhub_api_token: {{ jupyterhub.ops.services.daskstaging.apitoken }}
 
 postgres:
   # -- PostgreSQL port
