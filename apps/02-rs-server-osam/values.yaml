@@ -109,17 +109,18 @@ provider:
     # OVH Service (used in endpoint /cloud/project/<ovh_service>/user )
     ovh_service: "{{ rs_server_osam.provider.secret.ovh_service }}"
 
-ingress:
-  # -- Enabled/Disable ingress
+gatewayapi:
+  # -- Enabled/Disable Gateway API
   enabled: true
-  issuer:
-    # -- Ingress Issuer type
-    type: cluster-issuer
-    # -- Ingress Issuer name
-    name: "{{ cluster_issuer }}"
-  # -- Ingress host name
-  host: {{ platform_domain_name }}
-  # -- Ingress path for the application
+  # -- HTTPRoute parentRefs, can either be a ListenerSet or a Gateway
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: ListenerSet
+    name: processing
+    namespace: processing
+  # -- HTTPRoute host name
+  host: {{ rs_server.full_domain }}
+  # -- HTTPRoute path for the application
   path:
     - /storage
     - /osam/docs

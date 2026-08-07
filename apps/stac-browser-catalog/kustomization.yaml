@@ -19,10 +19,13 @@ helmCharts:
   releaseName: '{{ app_name }}'
   repo: https://rs-python.github.io/rs-helm
   valuesFile: values.yaml
-  version: 1.0.0-a12
+  version: 1.0.0-a12-60ef2c5
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 labels:
 - includeSelectors: true
   pairs:
     app.kubernetes.io/instance: '{{ app_name }}'
+
+resources:
+- stac-browser-catalog.yaml

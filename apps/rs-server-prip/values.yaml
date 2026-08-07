@@ -72,17 +72,18 @@ auth:
     # -- Random string used to encode cookie-based HTTP sessions in SessionMiddleware
     cookie_secret: "{{ rsserver_cookieSecret }}"
 
-ingress:
-  # -- Enabled/Disable ingress
+gatewayapi:
+  # -- Enabled/Disable Gateway API
   enabled: true
-  issuer:
-    # -- Ingress Issuer type
-    type: cluster-issuer
-    # -- Ingress Issuer name
-    name: "{{ cluster_issuer }}"
-  # -- Ingress host name
+  # -- HTTPRoute parentRefs, can either be a ListenerSet or a Gateway
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: ListenerSet
+    name: processing
+    namespace: processing
+  # -- HTTPRoute host name
   host: {{ rs_server.full_domain }}
-  # -- Ingress path
+  # -- HTTPRoute path for the application
   path:
     - /prip
 
