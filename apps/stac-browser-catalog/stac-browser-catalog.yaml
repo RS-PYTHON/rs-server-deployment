@@ -12,20 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-namespace: processing
-
-helmCharts:
-- name: stac-browser
-  releaseName: '{{ app_name }}'
-  repo: https://rs-python.github.io/rs-helm
-  valuesFile: values.yaml
-  version: 1.0.0-a12-60ef2c5
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-labels:
-- includeSelectors: true
-  pairs:
-    app.kubernetes.io/instance: '{{ app_name }}'
-
-resources:
-- stac-browser-cadip.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: stac-browser-catalog
+  annotations:
+    cert-manager.io/cluster-issuer: {{ cluster_issuer }}
+spec:
+  parentRef:
+    name: envoy
+    namespace: envoy-gateway
+    group: gateway.networking.k8s.io
+    kind: Gateway
+  listeners:
+  - name: https
+    hostname: stac-browser-catalog.{{ platform_domain_name }}
+    port: 443
+    protocol: HTTPS
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: stac-browser-catalog-{{ platform_domain_name | replace(".", "-") }}
+        kind: Secret

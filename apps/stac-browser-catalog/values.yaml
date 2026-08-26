@@ -54,16 +54,17 @@ tolerations:
     value: rs_server
     effect: NoSchedule
 
-ingress:
-  # -- Enabled/Disable ingress
+gatewayapi:
+  # -- Enabled/Disable Gateway API
   enabled: true
-  issuer:
-    # -- Ingress Issuer type
-    type: cluster-issuer
-    # -- Ingress Issuer name
-    name: "{{ cluster_issuer }}"
-  # -- Ingress host name.
-  host: stac-browser-catalog.{{ platform_domain_name }}
-  # -- Ingress path for the application
-  # Note that because of bug https://github.com/radiantearth/stac-browser/issues/479 the path is forced to /
-  path: /
+  # -- HTTPRoute parentRefs, can either be a ListenerSet or a Gateway
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: ListenerSet
+    name: stac-browser-catalog
+    namespace: processing
+  # -- HTTPRoute host name
+  host: stac-browser-catalog.{{ rs_server.full_domain }}
+  # -- HTTPRoute path for the application
+  path:
+    - /

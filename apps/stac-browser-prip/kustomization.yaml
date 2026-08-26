@@ -16,7 +16,7 @@ namespace: processing
 
 helmCharts:
 - name: stac-browser
-  version: 1.0.0-a12
+  version: 1.0.0-a12-60ef2c5
   releaseName: '{{ app_name }}'
   repo: https://rs-python.github.io/rs-helm
   valuesFile: values.yaml
@@ -26,3 +26,6 @@ labels:
 - includeSelectors: true
   pairs:
     app.kubernetes.io/instance: '{{ app_name }}'
+
+resources:
+- stac-browser-prip.yaml

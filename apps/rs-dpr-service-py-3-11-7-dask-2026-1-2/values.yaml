@@ -148,17 +148,18 @@ image:
   PullPolicy: IfNotPresent
   #imagePullSecrets: regcred
 
-ingress:
-  # -- Enabled/Disable ingress
+gatewayapi:
+  # -- Enabled/Disable Gateway API
   enabled: true
-  issuer:
-    # -- Ingress Issuer type
-    type: cluster-issuer
-    # -- Ingress Issuer name
-    name: "{{ cluster_issuer }}"
-  # -- Ingress host name
+  # -- HTTPRoute parentRefs, can either be a ListenerSet or a Gateway
+  parentRefs:
+  - group: gateway.networking.k8s.io
+    kind: ListenerSet
+    name: processing
+    namespace: processing
+  # -- HTTPRoute host name
   host: {{ platform_domain_name }}
-  # -- Ingress path for the application
+  # -- HTTPRoute path for the application
   path:
     - /dpr/processes/conv_safe_zarr
     - /dpr/processes/mockup
