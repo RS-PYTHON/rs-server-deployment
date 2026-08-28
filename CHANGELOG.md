@@ -13,6 +13,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a13] - 2026-08-28
+
+### Added
+
+- [RSPY-1111](https://github.com/RS-PYTHON/rs-server-deployment/pull/84) : Improve s3 operations
+- [RSPY-1060](https://github.com/RS-PYTHON/rs-server-deployment/pull/82) : Update dask-gateway and staging to dask 2026.7.0
+- [RSPY-856](https://github.com/RS-PYTHON/rs-server-deployment/pull/89) : Use gatewayapi instead of ingress
+
+### Changed
+
+- [PR#87](https://github.com/RS-PYTHON/rs-server-deployment/pull/87) : Add wrapper in ci
+- Bump helm chart version
+
+### Deprecated
+
+- nginx ingress
+
+### Fixed
+
+- [RSPY-996](https://github.com/RS-PYTHON/rs-server-deployment/pull/86) : Jupyterhub token for staging
+
 ## [1.0a12] - 2026-07-16
 
 ### Added
