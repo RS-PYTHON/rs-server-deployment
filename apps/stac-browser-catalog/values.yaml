@@ -38,6 +38,8 @@ app:
   SB_socialSharing: "email,bsky,mastodon"
   # -- URL of the STAC catalog
   SB_catalogUrl: https://{{ platform_domain_name }}/catalog/
+  # -- Enable georeferenced COG rendering for items displayed on collection and search-result maps
+  SB_displayOverviewsForChildren: "true"
 
 # -- Pod affinity
 affinity:
