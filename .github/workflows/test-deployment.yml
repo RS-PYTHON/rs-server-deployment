@@ -114,7 +114,7 @@ jobs:
         shell: bash
       - name: Run wrapper script
         run: |
-          .github/common/resources/wrapper.sh
+          .github/common/resources/wrapper.sh + ./rs-infra-monitoring/.github/common/resources/patch-external-grafana.sh
       - name: Deploy the core apps (for real)
         run: |
           # --- Use local cluster issuer instead of Let's Encrypt
@@ -135,7 +135,7 @@ jobs:
         run: |
           ./rs-workflow-env/.github/common/resources/configure-minikube-deployment.sh
           # rs-server requires apikeymanager, dask
-          for app in apikeymanager-db apikeymanager dask-gateway ; do
+          for app in apikeymanager-db listenerset apikeymanager dask-gateway ; do
             echo Installing $app...
             conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml  -e '{"package_paths": ["./rs-workflow-env/apps/"], "app": "'$app'"}'
           done
