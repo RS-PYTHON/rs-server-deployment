@@ -108,9 +108,9 @@ jobs:
       - name: "Configure cluster labels, IP and DNS (host + CoreDNS)"
         run: |
           if [ "${{ matrix.deploy_monitoring }}" = "true" ]; then
-            .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env= node-role.kubernetes.io/rs_server= node-role.kubernetes.io/access_csc=" "apikeymanager iam kube monitoring processing stac-browser-auxip stac-browser-cadip stac-browser-catalog stac-browser-prip"
+            .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env= node-role.kubernetes.io/rs_server= node-role.kubernetes.io/access_csc=" "iam kube monitoring processing dash-dask.processing apikeymanager stac-browser-auxip stac-browser-cadip stac-browser-catalog stac-browser-prip"
           else
-            .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env= node-role.kubernetes.io/rs_server= node-role.kubernetes.io/access_csc=" "apikeymanager iam kube processing stac-browser-auxip stac-browser-cadip stac-browser-catalog stac-browser-prip"
+            .github/common/resources/configure-cluster.sh "node-role.kubernetes.io/infra= node-role.kubernetes.io/rs_env= node-role.kubernetes.io/rs_server= node-role.kubernetes.io/access_csc=" "iam kube processing dash-dask.processing apikeymanager stac-browser-auxip stac-browser-cadip stac-browser-catalog stac-browser-prip"
           fi
         shell: bash
       - name: Deploy seaweedfs
@@ -138,9 +138,9 @@ jobs:
         run: |
           # --- Use local cluster issuer instead of Let's Encrypt
           if [ "${{ matrix.deploy_monitoring }}" = "true" ]; then
-            .github/common/resources/configure-local-ca.sh apikeymanager:processing iam:iam kube:default monitoring:monitoring processing:processing stac-browser-auxip:processing stac-browser-cadip:processing stac-browser-catalog:processing stac-browser-prip:processing
+            .github/common/resources/configure-local-ca.sh iam:iam kube:default monitoring:monitoring processing:processing apikeymanager:processing dash-dask.processing:dask-gateway stac-browser-auxip:processing stac-browser-cadip:processing stac-browser-catalog:processing stac-browser-prip:processing
           else
-            .github/common/resources/configure-local-ca.sh apikeymanager:processing iam:iam kube:default processing:processing stac-browser-auxip:processing stac-browser-cadip:processing stac-browser-catalog:processing stac-browser-prip:processing
+            .github/common/resources/configure-local-ca.sh iam:iam kube:default processing:processing apikeymanager:processing dash-dask.processing:dask-gateway stac-browser-auxip:processing stac-browser-cadip:processing stac-browser-catalog:processing stac-browser-prip:processing
           fi
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml
         shell: bash
