@@ -166,7 +166,7 @@ gatewayapi:
   parentRefs:
   - group: gateway.networking.k8s.io
     kind: ListenerSet
-    name: processing
+    name: root
     namespace: processing
   # -- HTTPRoute host name
   host: {{ platform_domain_name }}

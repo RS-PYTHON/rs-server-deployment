@@ -68,7 +68,7 @@ gatewayapi:
   parentRefs:
   - group: gateway.networking.k8s.io
     kind: ListenerSet
-    name: processing
+    name: root
     namespace: processing
   # -- HTTPRoute host name
   host: {{ rs_server.full_domain }}
