@@ -13,6 +13,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a14] - 2026-09-29
+
+### Added
+
+- [RSPY-1144](https://github.com/RS-PYTHON/rs-server-deployment/pull/92) : S3 L1 OLCI quicklooks
+
+### Fixed
+
+- [PR#94](https://github.com/RS-PYTHON/rs-server-deployment/pull/94) : Fix/ci gatewayapi
+- [PR#91](https://github.com/RS-PYTHON/rs-server-deployment/pull/91) : fix fastapi proxy headers and cors with envoy
+
 ## [1.0a13] - 2026-08-28
 
 ### Added
