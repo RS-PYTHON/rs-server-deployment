@@ -161,6 +161,7 @@ gatewayapi:
   host: {{ platform_domain_name }}
   # -- HTTPRoute path for the application
   path:
+    - /dpr/processes/conv_safe_zarr
     - /dpr/processes/s1_ard
 
 resources:
