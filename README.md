@@ -31,6 +31,36 @@ inventory. The `NN-` prefixes give the deployment order.
 
 All the services are deployed in the `processing` namespace, and the databases in the `database` namespace.
 
+### Catalog database initialization
+
+At each deployment of `01-cloudnative-pgstac`, the `init-pgstac-db` job
+([job-init-pgstac.yaml](apps/01-cloudnative-pgstac/job-init-pgstac.yaml)) initializes or updates the catalog
+database. All its SQL can be run again on an existing database:
+
+1. `pypgstac migrate` creates the pgSTAC schema, or migrates it to the version of the job image.
+2. The catalog user gets the `pgstac_read`, `pgstac_ingest` and `pgstac_admin` roles, and the `pgstac, public`
+   search path.
+3. The script of [configmap-extensions.yaml](apps/01-cloudnative-pgstac/configmap-extensions.yaml) customizes pgSTAC
+   for rs-server-catalog:
+   - it enables the `context` setting of pgSTAC (number of matching items in the search results);
+   - it registers in `pgstac.stac_extensions` the STAC extensions of the inventory variable
+     `rs_server_catalog.extensions`, with their JSON schemas, downloaded by an init container;
+   - it registers in `pgstac.queryables` the queryables of the inventory variable `rs_server_catalog.queryables`,
+     and sets the definition of the `expires` queryable (a UTC date-time);
+   - it sets up the search by `externalIds` (see
+     [Search by external identifiers](https://github.com/RS-PYTHON/rs-server/blob/develop/docs/doc/users/catalog.md#search-by-external-identifiers)):
+     the `externalIds` queryable, the `external_ids_contains` CQL2 operator in `pgstac.cql2_ops`, whose SQL template
+     is a jsonb containment on `properties.externalIds`, and the GIN indexes on this expression that serve it,
+     `items_external_ids_idx` on `pgstac.items` (so on all its partitions) and
+     `queryable_index_template_external_ids_idx` on `pgstac.queryable_index_template` (so that the pgSTAC
+     maintenance never drops it). It also removes the `external_ids_tokens` function used before pgSTAC 0.10.
+
+The local mode of [rs-demo](https://github.com/RS-PYTHON/rs-demo/blob/develop/local-mode/scripts/pgstac_post_actions.py)
+sets up the search by `externalIds` with the same SQL, and the tests of rs-server-catalog with
+`SQL_CREATE_EXTERNAL_IDS_OPERATOR` and `SQL_CREATE_EXTERNAL_IDS_INDEXES` of
+[external_ids.py](https://github.com/RS-PYTHON/rs-server/blob/develop/services/catalog/rs_server_catalog/data_management/external_ids.py):
+keep them aligned.
+
 ## Getting started
 
 Deploy the applications from the bastion, after the
