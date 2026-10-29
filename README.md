@@ -25,7 +25,7 @@ inventory. The `NN-` prefixes give the deployment order.
 | `rs-server-catalog` | The [catalog service](https://github.com/RS-PYTHON/rs-server/blob/develop/docs/doc/users/catalog.md). |
 | `rs-server-staging` | The [staging service](https://github.com/RS-PYTHON/rs-server/blob/develop/docs/doc/users/staging.md). |
 | `rs-server-frontend` | The [frontend](https://github.com/RS-PYTHON/rs-server/blob/develop/docs/doc/users/frontend.md): home page and aggregated OpenAPI documentation of the services. |
-| `rs-dpr-service-py-3-13-16-dask-2026-7-1` | The consolidated [rs-dpr-service](https://github.com/RS-PYTHON/rs-dpr-service) instance for the Python 3.13.16 / Dask 2026.7.1 processors, see [rs-dpr-service deployment](https://github.com/RS-PYTHON/rs-dpr-service/blob/develop/docs/doc/index.md#deployment). |
+| `rs-dpr-service-py-3-13-18-dask-2026-7-1` | The consolidated [rs-dpr-service](https://github.com/RS-PYTHON/rs-dpr-service) instance for the Python 3.13.18 / Dask 2026.7.1 processors, see [rs-dpr-service deployment](https://github.com/RS-PYTHON/rs-dpr-service/blob/develop/docs/doc/index.md#deployment). |
 | `stac-browser-auxip`, `stac-browser-cadip`, `stac-browser-catalog`, `stac-browser-prip` | The [STAC Browser](https://github.com/radiantearth/stac-browser) web interfaces of the stations and of the catalog, see [Browse products](https://github.com/RS-PYTHON/rs-documentation/blob/develop/docs/services/browse-products.md). |
 | `mockup-*` | The station mockups of [rs-testmeans](https://github.com/RS-PYTHON/rs-testmeans), for the test platforms only. |
 
