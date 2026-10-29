@@ -19,7 +19,7 @@ APPS="${APPS_DIR:-rs-server-deployment/apps}"
 
 RS_VALUES_FILES=(
   "${APPS}/02-rs-server-osam/values.yaml"
-  "${APPS}/rs-dpr-service-py-3-13-16-dask-2026-7-1/values.yaml"
+  "${APPS}/rs-dpr-service-py-3-13-18-dask-2026-7-1/values.yaml"
   "${APPS}/rs-server-adgs/values.yaml"
   "${APPS}/rs-server-cadip/values.yaml"
   "${APPS}/rs-server-catalog/values.yaml"
