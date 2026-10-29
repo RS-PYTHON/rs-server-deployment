@@ -13,6 +13,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a15] - 2026-10-22
+
+### Changed
+
+- Consolidate the DPR deployment on Python 3.13.16 and Dask 2026.7.1, and disable Envoy request timeouts for job-log SSE streams.
+
+### Added
+
+- [RSPY-1144](https://github.com/RS-PYTHON/rs-server-deployment/pull/88) : Update to pgstac 0.10.0
+- [RSPY-1186](https://github.com/RS-PYTHON/rs-server-deployment/pull/97) : Migrate SAFE conversion to cpmv3
+- [PR#99](https://github.com/RS-PYTHON/rs-server-deployment/pull/99) : Use dask 2026.7.1 for the staging
+- [RSPY-954](https://github.com/RS-PYTHON/rs-server-deployment/pull/100) : Add the README
+
+### Fixed
+
+- [PR#98](https://github.com/RS-PYTHON/rs-server-deployment/pull/98) : rename dpr folder to the right version
+- [RSPY-1240](https://github.com/RS-PYTHON/rs-server-deployment/pull/102) : Fix the search by externalIds with pgstac 0.10
+
+### Security
+
+- [RSPY-1229](https://github.com/RS-PYTHON/rs-server-deployment/pull/101) : Download and cache the Trivy databases once per day
+
 ## [1.0a14] - 2026-09-29
 
 ### Added
