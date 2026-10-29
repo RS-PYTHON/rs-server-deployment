@@ -15,6 +15,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [1.0a15] - 2026-10-22
 
+### Changed
+
+- Consolidate the DPR deployment on Python 3.13.16 and Dask 2026.7.1, and disable Envoy request timeouts for job-log SSE streams.
+
 ### Added
 
 - [RSPY-1144](https://github.com/RS-PYTHON/rs-server-deployment/pull/88) : Update to pgstac 0.10.0
