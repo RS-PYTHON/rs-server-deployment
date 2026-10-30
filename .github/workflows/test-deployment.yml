@@ -164,9 +164,12 @@ jobs:
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook --check apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-server-deployment/apps/"]}' -e private_registry=true
         shell: bash
       - name: Deploy the rs-server apps (for real)
+        env:
+          DEPLOY_MONITORING: ${{ matrix.deploy_monitoring }}
+          PR_BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
         run: |
           sed -i 's!debug: false!debug: true!g' roles/app-installer/defaults/main.yaml
-          DEPLOY_MONITORING=${{ matrix.deploy_monitoring }} ./rs-server-deployment/.github/common/resources/configure-minikube-deployment.sh
+          ./rs-server-deployment/.github/common/resources/configure-minikube-deployment.sh
           conda run -n rspy --no-capture-output env PYTHONUNBUFFERED=1 ANSIBLE_FORCE_COLOR=1 ansible-playbook apps.yaml -i inventory/mycluster/hosts.yaml -e '{"package_paths": ["./rs-server-deployment/apps/"]}'
         shell: bash
       - name: 🩺 Kubernetes failure diagnostics
