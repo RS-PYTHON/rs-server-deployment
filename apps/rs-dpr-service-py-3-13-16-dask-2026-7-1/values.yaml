@@ -34,6 +34,19 @@ app:
   # -- URL of the API Key Manager home page (public)
   uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
 
+processors:
+  # -- List of DPR processors exposed/enabled by rs-dpr-service.
+  enabled:
+    - conv_safe_zarr
+    - mockup
+    - s1_l0
+    - s3_l0
+    # Retained by request; image 1.0a15 does not expose this processor yet.
+    - s3_olci
+    - s1_ard
+    - s3_l1olci
+    - s3_l2olci
+
 dask:
   # -- Dask gateway address
   gateway_address: http://traefik-dask-gateway.dask-gateway.svc.cluster.local
@@ -143,7 +156,7 @@ image:
   # -- Image repository
   repository: rs-python
   # -- Image name
-  name: rs-dpr-service_py3.11.7-2026.1.2
+  name: rs-dpr-service_py3.13.16-2026.7.1
   # -- Image pull policy
   PullPolicy: IfNotPresent
   #imagePullSecrets: regcred
@@ -161,7 +174,23 @@ gatewayapi:
   host: {{ platform_domain_name }}
   # -- HTTPRoute path for the application
   path:
+    - /dpr/processes
     - /dpr/processes/mockup
+    - /dpr/processes/s1_l0
+    - /dpr/processes/s3_l0
+    - /dpr/processes/s3_olci
+    - /dpr/processes/s3_l1olci
+    - /dpr/processes/s3_l2olci
+    - /dpr/processes/conv_safe_zarr
+    - /dpr/processes/s1_ard
+    - /dpr/jobs
+  logStreaming:
+    # Dedicated HTTPRoute rule for SSE logs; this overrides the default Envoy request timeouts.
+    enabled: true
+    pathRegex: "^/dpr/jobs/[^/]+/logs$"
+    timeouts:
+      request: "0s"
+      backendRequest: "0s"
 
 resources:
   request:
