@@ -26,6 +26,7 @@ inventory. The `NN-` prefixes give the deployment order.
 | `rs-server-staging` | The [staging service](https://github.com/RS-PYTHON/rs-server/blob/develop/docs/doc/users/staging.md). |
 | `rs-server-frontend` | The [frontend](https://github.com/RS-PYTHON/rs-server/blob/develop/docs/doc/users/frontend.md): home page and aggregated OpenAPI documentation of the services. |
 | `rs-dpr-service-py-3-13-16-dask-2026-7-1` | The consolidated [rs-dpr-service](https://github.com/RS-PYTHON/rs-dpr-service) instance for the Python 3.13.16 / Dask 2026.7.1 processors, see [rs-dpr-service deployment](https://github.com/RS-PYTHON/rs-dpr-service/blob/develop/docs/doc/index.md#deployment). |
+| `rs-dpr-service-mockup` | A separate, single-replica DPR instance exposing only the `mockup` processor, for testing process-specific execution and log routing. |
 | `stac-browser-auxip`, `stac-browser-cadip`, `stac-browser-catalog`, `stac-browser-prip` | The [STAC Browser](https://github.com/radiantearth/stac-browser) web interfaces of the stations and of the catalog, see [Browse products](https://github.com/RS-PYTHON/rs-documentation/blob/develop/docs/services/browse-products.md). |
 | `mockup-*` | The station mockups of [rs-testmeans](https://github.com/RS-PYTHON/rs-testmeans), for the test platforms only. |
 
@@ -34,6 +35,28 @@ inventory. The `NN-` prefixes give the deployment order.
 > Its endpoint will not work until image support is added.
 
 All the services are deployed in the `processing` namespace, and the databases in the `database` namespace.
+
+### Mockup-only DPR instance
+
+[rs-dpr-service-mockup](apps/rs-dpr-service-mockup) uses the same DPR image, database, authentication and
+object storage configuration as the consolidated instance, but sets `DPR_ENABLED_PROCESSORS=mockup`.
+The consolidated instance no longer enables `mockup` or claims its specific route.
+
+The mockup application's [HTTPRoute](apps/rs-dpr-service-mockup/httproute.yaml) routes
+`/dpr/processes/mockup` to its own Service. It rewrites `/dpr/processes/mockup/jobs/*` to `/dpr/jobs/*`,
+with request timeouts disabled for log streaming. It does not claim the shared `/dpr/jobs` route.
+These rules are supplied directly by the application, so they work with the pinned `1.0.0-a15` Helm chart.
+Processing clients must use the process-scoped log URL to retrieve logs from this instance.
+
+Deploy the new application and update the consolidated application's processor configuration with the
+single-application command below, using `app=rs-dpr-service-mockup` and
+`app=rs-dpr-service-py-3-13-18-dask-2026-7-1`, respectively. Existing jobs should finish before updating
+the consolidated instance. To remove this test instance, restore `mockup` and its specific route in the
+consolidated application's values before removing the mockup application.
+
+This application does not create a Dask cluster: initialise a compatible mockup Dask cluster separately.
+Keep one replica and one server worker per instance because job logs are held in process-local memory.
+On production platforms, omit this test application from the deployment package.
 
 ### Catalog database initialization
 

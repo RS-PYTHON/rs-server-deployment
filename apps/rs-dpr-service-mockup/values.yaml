@@ -1,0 +1,125 @@
+# Copyright 2023-2026 Airbus, CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+namespace: processing
+replicaCount: 1
+
+service:
+  port: 8080
+
+app:
+  port: 8000
+  docsUrl: /docs
+  confDir: /app/conf
+  uacUrl: http://apikeymanager.processing.svc.cluster.local:8000/auth/check_key
+  uacHomeUrl: https://apikeymanager.{{ platform_domain_name }}/docs
+
+processors:
+  enabled:
+    - mockup
+
+dask:
+  gateway_address: http://traefik-dask-gateway.dask-gateway.svc.cluster.local
+  gateway_auth_type: jupyterhub
+
+probe:
+  startup:
+    path: /_mgmt/ping
+    port: 8000
+    initialDelaySeconds: 20
+    periodSeconds: 2
+    timeoutSeconds: 1
+  liveness:
+    path: /_mgmt/ping
+    port: 8000
+    initialDelaySeconds: 0
+    periodSeconds: 30
+    timeoutSeconds: 5
+  readiness:
+    path: /_mgmt/ping
+    port: 8000
+    initialDelaySeconds: 0
+    periodSeconds: 30
+    timeoutSeconds: 5
+
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: node-role.kubernetes.io/rs_server
+          operator: Exists
+
+tolerations:
+  - key: role
+    value: rs_server
+    effect: NoSchedule
+
+initContainers:
+  - name: init-check
+    image: alpine/curl:latest
+    command:
+      - /bin/sh
+      - -c
+      - |
+        until test "$(curl -XGET --silent http://alloy.monitoring.svc.cluster.local:12345/-/ready)" = "Alloy is ready."; do echo Alloy is not ready; sleep 2; done; echo Alloy reached
+
+postgres:
+  port: "5432"
+  db: {{ rs_server.database.name }}
+  host: {{ rs_server.database.host }}
+  secret:
+    user: {{ rs_server.database.username }}
+    pass: {{ rs_server.database.password }}
+
+obs:
+  endpoint: {{ s3.endpoint }}
+  region: {{ s3.region }}
+  secret:
+    ak: {{ s3.access_key }}
+    sk: {{ s3.secret_key }}
+
+auth:
+  secret:
+    oidc_endpoint: "https://iam.{{ platform_domain_name }}"
+    oidc_realm: "rspy"
+    oidc_client_id: "apikeymanager"
+    oidc_client_secret: "{{ apikeymanager_oidc_client_secret }}"
+    cookie_secret: "{{ rsserver_cookieSecret }}"
+
+image:
+  registry: ghcr.io
+  repository: rs-python
+  name: rs-dpr-service_py3.13.16-2026.7.1
+  version: "1.0a15"
+  PullPolicy: IfNotPresent
+
+ingress:
+  enabled: false
+
+# The application's HTTPRoute supplies process-specific routing and job URL rewriting.
+gatewayapi:
+  enabled: false
+
+resources:
+  request:
+    ram: "256Mi"
+    cpu: "100m"
+  limit:
+    ram: "1000Mi"
+    cpu: "500m"
+
+otel:
+  trace_headers: false
+  trace_body: false
