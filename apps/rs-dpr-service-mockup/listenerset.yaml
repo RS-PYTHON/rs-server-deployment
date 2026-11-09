@@ -1,0 +1,44 @@
+# Copyright 2023-2026 Airbus, CS Group
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: ListenerSet
+metadata:
+  name: '{{ app_name }}'
+  namespace: processing
+  annotations:
+    # DNS currently points at NGINX; use its HTTP-01 solver for the shared certificate.
+    cert-manager.io/cluster-issuer: '{{ rs_dpr_mockup_cluster_issuer | default("letsencrypt-prod") }}'
+spec:
+  parentRef:
+    name: envoy
+    namespace: envoy-gateway
+    group: gateway.networking.k8s.io
+    kind: Gateway
+  listeners:
+    - name: https
+      hostname: 'dpr-mockup.{{ platform_domain_name }}'
+      port: 443
+      protocol: HTTPS
+      allowedRoutes:
+        namespaces:
+          from: Same
+        kinds:
+          - group: gateway.networking.k8s.io
+            kind: HTTPRoute
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: 'dpr-mockup-{{ platform_domain_name | replace(".", "-") }}'
+            kind: Secret

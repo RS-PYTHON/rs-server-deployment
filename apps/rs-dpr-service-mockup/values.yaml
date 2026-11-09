@@ -77,7 +77,8 @@ initContainers:
 
 postgres:
   port: "5432"
-  db: {{ rs_server.database.name }}
+  # Provisioned by apps/01-rs-dpr-service-mockup-db on the existing PostgreSQL cluster.
+  db: "{{ rs_dpr_mockup_database_name | default('rs_dpr_mockup') }}"
   host: {{ rs_server.database.host }}
   secret:
     user: {{ rs_server.database.username }}
@@ -101,14 +102,14 @@ auth:
 image:
   registry: ghcr.io
   repository: rs-python
-  name: rs-dpr-service_py3.13.16-2026.7.1
-  version: "1.0a15"
+  name: rs-dpr-service_py3.13.18-2026.7.1
+  version: "sha256:c8a5f856d692285a858af3a1f97bb2b131c6bc11789bea7c38375afc26fbc97f"
   PullPolicy: IfNotPresent
 
 ingress:
   enabled: false
 
-# The application's HTTPRoute supplies process-specific routing and job URL rewriting.
+# The application's HTTPRoute exposes standard DPR paths on a dedicated hostname.
 gatewayapi:
   enabled: false
 
