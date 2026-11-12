@@ -77,8 +77,7 @@ initContainers:
 
 postgres:
   port: "5432"
-  # Provisioned by apps/01-rs-dpr-service-mockup-db on the existing PostgreSQL cluster.
-  db: "{{ rs_dpr_mockup_database_name | default('rs_dpr_mockup') }}"
+  db: {{ rs_server.database.name }}
   host: {{ rs_server.database.host }}
   secret:
     user: {{ rs_server.database.username }}
@@ -109,7 +108,7 @@ image:
 ingress:
   enabled: false
 
-# The application's HTTPRoute exposes standard DPR paths on a dedicated hostname.
+# The application's HTTPRoute supplies process-specific routing and job URL rewriting.
 gatewayapi:
   enabled: false
 
