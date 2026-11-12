@@ -102,7 +102,7 @@ image:
   registry: ghcr.io
   repository: rs-python
   name: rs-dpr-service_py3.13.18-2026.7.1
-  version: "sha256:c8a5f856d692285a858af3a1f97bb2b131c6bc11789bea7c38375afc26fbc97f"
+  version: "latest"
   PullPolicy: IfNotPresent
 
 ingress:
