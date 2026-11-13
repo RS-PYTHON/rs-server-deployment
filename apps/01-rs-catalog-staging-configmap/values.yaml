@@ -113,3 +113,28 @@ expiration_bucket_csv: |
     copernicus,s03hkmraw,*,30,prip-rs-sentinel-3-s03hkmraw
     copernicus,s03hkm2l0,*,30,prip-rs-sentinel-3-s03hkm2l0
     copernicus,s03natl0_,*,30,prip-rs-sentinel-3-s03natl0x
+    copernicus,cri_adf_l0cfg,*,120,prip-rs-cristal-cri-aux
+    copernicus,cri_adf_pktid,*,120,prip-rs-cristal-cri-aux
+    copernicus,cri_adf_leaps,*,120,prip-rs-cristal-cri-aux
+    copernicus,cri_adf_cadcf,*,120,prip-rs-cristal-cri-aux
+    copernicus,cri_adf_preo_,*,120,prip-rs-cristal-cri-aux
+    copernicus,crisac0fr,*,120,prip-rs-cristal-crisac0fr
+    copernicus,crisac0lr,*,120,prip-rs-cristal-crisac0lr
+    copernicus,crisic0fr,*,120,prip-rs-cristal-crisic0fr
+    copernicus,crisic0lr,*,120,prip-rs-cristal-crisic0lr
+    copernicus,crisio0fr,*,120,prip-rs-cristal-crisio0fr
+    copernicus,crisio0lr,*,120,prip-rs-cristal-crisio0lr
+    copernicus,crisac0ec,*,120,prip-rs-cristal-crisac0ec
+    copernicus,crisic0ec,*,120,prip-rs-cristal-crisic0ec
+    copernicus,crisio0ec,*,120,prip-rs-cristal-crisio0ec
+    copernicus,cric1_0rw,*,120,prip-rs-cristal-cric1x0rw
+    copernicus,cric1_0lr,*,120,prip-rs-cristal-cric1x0lr
+    copernicus,cric1_0rm,*,120,prip-rs-cristal-cric1x0rm
+    copernicus,cric1_0in,*,120,prip-rs-cristal-cric1x0in
+    copernicus,cric2_0rw,*,120,prip-rs-cristal-cric2x0rw
+    copernicus,crinat0__,*,120,prip-rs-cristal-crinat0xx
+    copernicus,crigns0__,*,120,prip-rs-cristal-crigns0xx
+    copernicus,cristr0__,*,120,prip-rs-cristal-cristr0xx
+    copernicus,crihkmraw,*,120,prip-rs-cristal-crihkmraw
+    copernicus,criamr0__,*,120,prip-rs-cristal-criamr0xx
+    copernicus,criacq0__,*,120,prip-rs-cristal-criacq0xx
