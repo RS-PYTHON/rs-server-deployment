@@ -15,9 +15,7 @@
 namespace: processing
 
 resources:
-- listenerset.yaml
 - httproute.yaml
-- ingress.yaml
 
 helmCharts:
 - name: rs-dpr-service
