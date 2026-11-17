@@ -163,8 +163,8 @@ image:
   #imagePullSecrets: regcred
 
 gatewayapi:
-  # -- Enabled/Disable Gateway API
-  enabled: true
+  # -- Disabled here; the application's httproute.yaml supplies process-specific job URL rewriting with the pinned 1.0.0-a15 chart.
+  enabled: false
   # -- HTTPRoute parentRefs, can either be a ListenerSet or a Gateway
   parentRefs:
   - group: gateway.networking.k8s.io

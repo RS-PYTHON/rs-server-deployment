@@ -14,6 +14,9 @@
 
 namespace: processing
 
+resources:
+- httproute.yaml
+
 helmCharts:
 - name: rs-dpr-service
   releaseName: '{{ app_name }}'
