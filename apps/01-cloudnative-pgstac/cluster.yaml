@@ -59,6 +59,7 @@ spec:
       cpu: 300m
 
   storage:
+    storageClass: csi-cinder-high-speed-gen2-retain
     pvcTemplate:
       accessModes:
         - ReadWriteOnce
