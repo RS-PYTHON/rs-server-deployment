@@ -13,15 +13,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
-## [Unreleased]
+## [1.0a16] - 2026-11-23
 
 ### Added
 
-- Add a separate, mockup-only DPR instance with process-scoped Gateway routing and job URL rewriting.
-
-### Changed
-
-- Move the mockup processor and its specific route out of the consolidated DPR instance.
+- [PR#107](https://github.com/RS-PYTHON/rs-server-deployment/pull/107⁠) : Update to pgstac 0.10.1
+- [RSPY-1251](https://github.com/RS-PYTHON/rs-server-deployment/pull/106) : Add-cristal-in-the-system: add cristal in system
+- [PR#104](https://github.com/RS-PYTHON/rs-server-deployment/pull/104) : Update Python version to 3.13.18
+- [PR#105⁠](https://github.com/RS-PYTHON/rs-server-deployment/pull/105⁠) : Add a dpr-service for mockup only - #105⁠
 
 ## [1.0a15] - 2026-10-22
 
