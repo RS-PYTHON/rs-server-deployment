@@ -13,6 +13,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [1.0a16] - 2026-11-23
+
+### Added
+
+- [PR#107](https://github.com/RS-PYTHON/rs-server-deployment/pull/107⁠) : Update to pgstac 0.10.1
+- [RSPY-1251](https://github.com/RS-PYTHON/rs-server-deployment/pull/106) : Add-cristal-in-the-system: add cristal in system
+- [PR#104](https://github.com/RS-PYTHON/rs-server-deployment/pull/104) : Update Python version to 3.13.18
+
 ## [1.0a15] - 2026-10-22
 
 ### Changed
