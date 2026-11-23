@@ -13,6 +13,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 >- **Fixed** for any bug fixes.
 >- **Security** in case of vulnerabilities.
 
+## [Unreleased]
+
+### Added
+
+- Add a separate, mockup-only DPR instance with process-scoped Gateway routing and job URL rewriting.
+
+### Changed
+
+- Move the mockup processor and its specific route out of the consolidated DPR instance.
+
 ## [1.0a15] - 2026-10-22
 
 ### Changed
