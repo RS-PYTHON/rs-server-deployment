@@ -45,7 +45,7 @@ The consolidated instance no longer enables `mockup` or claims its specific rout
 The mockup application's [HTTPRoute](apps/rs-dpr-service-mockup/httproute.yaml) routes
 `/dpr/processes/mockup` to its own Service. It rewrites `/dpr/processes/mockup/jobs/*` to `/dpr/jobs/*`,
 with request timeouts disabled for log streaming. It does not claim the shared `/dpr/jobs` route.
-These rules are supplied directly by the application, so they work with the pinned `1.0.0-a15` Helm chart.
+The application supplies these rules directly and uses the `1.0.0-a16` Helm chart.
 Processing clients must use the process-scoped log URL to retrieve logs from this instance.
 
 Deploy the new application and update the consolidated application's processor configuration with the
