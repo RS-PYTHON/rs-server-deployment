@@ -81,6 +81,10 @@ database. All its SQL can be run again on an existing database:
      `items_external_ids_idx` on `pgstac.items` (so on all its partitions) and
      `queryable_index_template_external_ids_idx` on `pgstac.queryable_index_template` (so that the pgSTAC
      maintenance never drops it). It also removes the `external_ids_tokens` function used before pgSTAC 0.10.
+   - it creates `text_pattern_ops` B-tree indexes on item `id`, `items_id_pattern_idx` on `pgstac.items` (so on all
+     its partitions) and `queryable_index_template_id_pattern_idx` on `pgstac.queryable_index_template`, so that
+     prefix `LIKE` searches on item IDs (searching without file extension) use an index scan even on non-`C`
+     collations.
 
 The local mode of [rs-demo](https://github.com/RS-PYTHON/rs-demo/blob/develop/local-mode/scripts/pgstac_post_actions.py)
 sets up the search by `externalIds` with the same SQL, and the tests of rs-server-catalog with
