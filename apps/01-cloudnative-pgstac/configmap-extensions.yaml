@@ -77,6 +77,18 @@ data:
         USING GIN ((content->'properties'->'externalIds') jsonb_path_ops);
     EOSQL
 
+    # Prefix index on item id so `id LIKE '<id>.%'` (used when searching items without extension)
+    # uses an index scan even when the database collation is not C (e.g. en_US.utf8).
+    # The queryable_index_template index ensures pgstac.maintain_partitions(dropindexes => true)
+    # keeps this index on every partition.
+    psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
+    SET search_path TO pgstac, public;
+    CREATE INDEX IF NOT EXISTS queryable_index_template_id_pattern_idx ON pgstac.queryable_index_template
+        (id text_pattern_ops);
+    CREATE INDEX IF NOT EXISTS items_id_pattern_idx ON pgstac.items
+        (id text_pattern_ops);
+    EOSQL
+
     psql -X -q -v ON_ERROR_STOP=1 {{ rs_server_catalog.database.name }} <<EOSQL
     SET search_path TO pgstac, public;
     UPDATE queryables
